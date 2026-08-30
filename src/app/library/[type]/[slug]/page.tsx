@@ -1,0 +1,8 @@
+import { notFound } from "next/navigation";
+import Link from "next/link";
+import { getPublishedContentEntry, type PublicContentType } from "@/lib/platform-data";
+import { PostContent } from "@/components/site/post-content";
+const map:Record<string,PublicContentType>={principle:"PRINCIPLE",adr:"ADR","engineering-note":"ENGINEERING_NOTE","open-source":"OPEN_SOURCE","code-sample":"CODE_SAMPLE",speaking:"SPEAKING",recommendation:"RECOMMENDATION",changelog:"CHANGELOG",uses:"USES",now:"NOW","reading-note":"READING_NOTE"};
+const back:Record<PublicContentType,string>={PRINCIPLE:"/principles",ADR:"/decisions",ENGINEERING_NOTE:"/notes",OPEN_SOURCE:"/open-source",CODE_SAMPLE:"/code",SPEAKING:"/speaking",RECOMMENDATION:"/recommendations",CHANGELOG:"/changelog",USES:"/uses",NOW:"/now",READING_NOTE:"/reading"};
+export const dynamic="force-dynamic";
+export default async function LibraryEntryPage({params}:{params:Promise<{type:string;slug:string}>}){const {type,slug}=await params;const resolved=map[type];if(!resolved)notFound();let row=null;try{row=await getPublishedContentEntry(resolved,slug)}catch{}if(!row)notFound();return <main className="section-space"><article className="container-shell max-w-4xl"><Link href={back[resolved]} className="text-sm text-muted-foreground hover:text-primary">← Back</Link><header className="mt-8 border-b border-border pb-8"><p className="section-kicker">{resolved.replaceAll("_"," ")}</p><h1 className="mt-3 text-4xl font-extrabold tracking-[-.04em] sm:text-5xl">{row.title}</h1>{row.summary?<p className="mt-5 text-lg leading-8 text-muted-foreground">{row.summary}</p>:null}</header><div className="prose-portfolio mt-10"><PostContent content={row.content??""}/></div></article></main>}

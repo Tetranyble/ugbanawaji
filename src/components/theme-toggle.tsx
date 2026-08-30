@@ -1,0 +1,51 @@
+"use client";
+import { useSyncExternalStore } from "react";
+import { Monitor, Moon, Sun } from "lucide-react";
+import { useTheme } from "next-themes";
+import { Button } from "@/components/ui/button";
+import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
+
+const options = [
+  { value: "system", label: "System", Icon: Monitor },
+  { value: "light", label: "Light", Icon: Sun },
+  { value: "dark", label: "Dark", Icon: Moon },
+] as const;
+
+const subscribeToHydration = () => () => {};
+const getClientSnapshot = () => true;
+const getServerSnapshot = () => false;
+
+export function ThemeToggle() {
+  const { theme, resolvedTheme, setTheme } = useTheme();
+  const mounted = useSyncExternalStore(
+    subscribeToHydration,
+    getClientSnapshot,
+    getServerSnapshot,
+  );
+
+  const Icon = mounted && resolvedTheme === "dark" ? Moon : Sun;
+
+  function applyImmediately(value: "system" | "light" | "dark") {
+    const resolved = value === "system"
+      ? (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light")
+      : value;
+    document.documentElement.classList.remove("light", "dark");
+    document.documentElement.classList.add(resolved);
+  }
+
+  function choose(value: "system" | "light" | "dark") {
+    applyImmediately(value);
+    setTheme(value);
+    void fetch("/api/preferences/theme", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ theme: value }),
+    }).catch(() => { /* anonymous/local preference still works */ });
+  }
+  return <DropdownMenu.Root>
+    <DropdownMenu.Trigger asChild><Button variant="ghost" size="icon" aria-label="Choose theme"><Icon className="size-4" /></Button></DropdownMenu.Trigger>
+    <DropdownMenu.Portal><DropdownMenu.Content sideOffset={8} align="end" className="z-[100] min-w-40 rounded-xl border border-border bg-card p-1 text-foreground shadow-lg">
+      {options.map(({value,label,Icon:OptionIcon}) => <DropdownMenu.Item key={value} onSelect={() => choose(value)} className="flex cursor-pointer items-center gap-2 rounded-lg px-3 py-2 text-sm outline-none hover:bg-muted focus:bg-muted"><OptionIcon className="size-4"/><span className="flex-1">{label}</span>{mounted&&theme===value?<span className="text-xs text-primary">●</span>:null}</DropdownMenu.Item>)}
+    </DropdownMenu.Content></DropdownMenu.Portal>
+  </DropdownMenu.Root>;
+}

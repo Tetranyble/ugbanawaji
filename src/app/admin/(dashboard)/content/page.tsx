@@ -1,0 +1,8 @@
+import Link from "next/link";
+import { desc } from "drizzle-orm";
+import { db } from "@/db";
+import { contentEntries } from "@/db/schema";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { contentTypeLabels } from "@/components/admin/content-entry-editor";
+export default async function ContentPage(){const rows=await db.select().from(contentEntries).orderBy(desc(contentEntries.updatedAt));return <div><div className="flex flex-wrap items-end justify-between gap-4"><div><p className="section-kicker">Knowledge base</p><h1 className="mt-2 text-3xl font-extrabold">Structured content</h1><p className="mt-3 max-w-3xl text-muted-foreground">Manage engineering principles, ADRs, open-source work, speaking, recommendations, changelog, uses, now and reading notes.</p></div><Button asChild><Link href="/admin/content/new">New content</Link></Button></div><div className="mt-8 space-y-3">{rows.length?rows.map(row=><Card key={row.id}><CardContent className="flex flex-wrap items-center justify-between gap-4 p-5"><div><p className="text-xs font-bold uppercase tracking-[.12em] text-primary">{contentTypeLabels[row.type]}</p><Link href={`/admin/content/${row.id}`} className="mt-1 block text-lg font-bold hover:text-primary">{row.title}</Link><p className="mt-1 text-sm text-muted-foreground">{row.status} · /{row.slug}</p></div><Button asChild variant="outline" size="sm"><Link href={`/admin/content/${row.id}`}>Edit</Link></Button></CardContent></Card>):<Card><CardContent className="p-6 text-muted-foreground">No structured content yet.</CardContent></Card>}</div></div>}

@@ -1,0 +1,15 @@
+import Link from "next/link";
+import { ArrowRight } from "lucide-react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import type { PublicContentType } from "@/lib/platform-data";
+import { getPublishedContent } from "@/lib/platform-data";
+
+const labels: Record<PublicContentType,string> = { PRINCIPLE:"Engineering Principles", ADR:"Technical Decisions", ENGINEERING_NOTE:"Engineering Notes", OPEN_SOURCE:"Open Source", CODE_SAMPLE:"Code Samples", SPEAKING:"Speaking & Teaching", RECOMMENDATION:"Recommendations", CHANGELOG:"Changelog", USES:"Uses", NOW:"Now", READING_NOTE:"Reading Notes" };
+const descriptions: Partial<Record<PublicContentType,string>> = {
+  PRINCIPLE:"The principles I use to make critical systems easier to reason about, operate and evolve.", ADR:"Short records of architecture decisions, context, trade-offs and consequences.", ENGINEERING_NOTE:"Focused notes on architecture, distributed systems, fintech, Java, infrastructure and applied AI.", OPEN_SOURCE:"Public repositories, reference architectures and reusable engineering work.", CODE_SAMPLE:"Sanitized code samples that illustrate patterns without exposing private codebases.", SPEAKING:"Courses, workshops, talks and technical teaching.", READING_NOTE:"Technical takeaways from books, RFCs, standards and papers.",
+};
+export async function ContentCollection({type,eyebrow,title,description}:{type:PublicContentType;eyebrow?:string;title?:string;description?:string}){
+  let rows: Awaited<ReturnType<typeof getPublishedContent>>=[]; try{rows=await getPublishedContent(type)}catch{}
+  return <main className="section-space"><div className="container-shell"><p className="section-kicker">{eyebrow??labels[type]}</p><h1 className="section-title mt-3 max-w-4xl">{title??labels[type]}</h1><p className="mt-5 max-w-3xl leading-7 text-muted-foreground">{description??descriptions[type]}</p><div className="mt-10 grid gap-5 lg:grid-cols-2">{rows.length?rows.map(row=><Card key={row.id} className="group"><CardHeader><div className="flex flex-wrap items-center gap-2"><Badge>{row.featured?"Featured":labels[type]}</Badge>{row.publishedAt?<span className="text-xs text-muted-foreground">{row.publishedAt.toLocaleDateString()}</span>:null}</div><CardTitle className="mt-2 text-2xl">{row.title}</CardTitle><CardDescription>{row.summary}</CardDescription></CardHeader><CardContent><Link href={`/library/${type.toLowerCase().replaceAll("_","-")}/${row.slug}`} className="inline-flex items-center gap-2 text-sm font-semibold text-primary">Read more <ArrowRight className="size-4"/></Link></CardContent></Card>):<Card className="lg:col-span-2 border-dashed"><CardContent className="p-8"><h2 className="text-xl font-bold">This section is ready for content.</h2><p className="mt-2 text-muted-foreground">I publish here when there is something useful and evidence-backed to share, rather than filling the page with placeholder material.</p></CardContent></Card>}</div></div></main>
+}

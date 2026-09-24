@@ -11,3 +11,4 @@ coverage
 release
 .storage
 *.tsbuildinfo
+/ugbanawaji-main

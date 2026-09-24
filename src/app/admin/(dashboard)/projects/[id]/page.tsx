@@ -1,10 +1,23 @@
-import { notFound } from "next/navigation";
 import { desc, eq } from "drizzle-orm";
+import { notFound } from "next/navigation";
 import { db } from "@/db";
-import { projectRevisions, projects } from "@/db/schema";
+import { projectRevisions } from "@/db/schema";
+import { getAdminProject } from "@/lib/data";
 import { deleteProject, generateProjectPreviewToken, restoreProjectRevision, updateProject } from "@/app/admin/actions";
 import { ProjectEditor } from "@/components/admin/project-editor";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import { SubmitButton } from "@/components/forms/submit-button";
-export default async function EditProjectPage({params,searchParams}:{params:Promise<{id:string}>;searchParams:Promise<{previewToken?:string}>}){const {id}=await params;const{previewToken}=await searchParams;const [[project],revisions]=await Promise.all([db.select().from(projects).where(eq(projects.id,id)).limit(1),db.select().from(projectRevisions).where(eq(projectRevisions.projectId,id)).orderBy(desc(projectRevisions.createdAt)).limit(12)]);if(!project)notFound();const origin=process.env.APP_URL||process.env.NEXT_PUBLIC_SITE_URL||"http://localhost:3000";return <div className="space-y-8">{previewToken?<Card className="border-primary/30"><CardHeader><CardTitle>Shareable case-study preview</CardTitle></CardHeader><CardContent><p className="text-sm text-muted-foreground">Expires in 72 hours.</p><code className="mt-3 block break-all rounded-xl bg-muted p-3 text-xs">{`${origin}/preview/project/${previewToken}`}</code></CardContent></Card>:null}<div className="flex justify-end"><form action={generateProjectPreviewToken.bind(null,id)}><SubmitButton variant="outline" pendingText="Creating…">Create share preview</SubmitButton></form></div><ProjectEditor project={project} action={updateProject.bind(null,id)} deleteAction={deleteProject.bind(null,id)}/><Card><CardHeader><CardTitle>Revision history</CardTitle></CardHeader><CardContent className="space-y-3">{revisions.length?revisions.map(revision=>{const snapshot=revision.snapshot as Record<string,unknown>;return <div key={revision.id} className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-border p-4"><div><p className="font-semibold">{String(snapshot.title??project.title)}</p><p className="text-xs text-muted-foreground">Snapshot · {revision.createdAt.toLocaleString()}</p></div><form action={restoreProjectRevision.bind(null,id,revision.id)}><SubmitButton size="sm" variant="outline" pendingText="Restoring…">Restore</SubmitButton></form></div>}):<p className="text-sm text-muted-foreground">A snapshot is created automatically before each saved case-study update.</p>}</CardContent></Card></div>}
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+
+export const dynamic = "force-dynamic";
+
+export default async function EditProjectPage({params,searchParams}:{params:Promise<{id:string}>;searchParams:Promise<{previewToken?:string}>}){
+  const {id}=await params;
+  const {previewToken}=await searchParams;
+  const [project,revisions]=await Promise.all([
+    getAdminProject(id),
+    db.select().from(projectRevisions).where(eq(projectRevisions.projectId,id)).orderBy(desc(projectRevisions.createdAt)).limit(12),
+  ]);
+  if(!project)notFound();
+  const origin=process.env.APP_URL||process.env.NEXT_PUBLIC_SITE_URL||"http://localhost:3000";
+  return <div className="space-y-8">{previewToken?<Card className="border-primary/30"><CardHeader><CardTitle>Shareable case-study preview</CardTitle></CardHeader><CardContent><p className="text-sm text-muted-foreground">Expires in 72 hours.</p><code className="mt-3 block break-all rounded-xl bg-muted p-3 text-xs">{`${origin}/preview/project/${previewToken}`}</code></CardContent></Card>:null}<div className="flex justify-end"><form action={generateProjectPreviewToken.bind(null,id)}><SubmitButton variant="outline" pendingText="Creating…">Create share preview</SubmitButton></form></div><ProjectEditor project={project} action={updateProject.bind(null,id)} deleteAction={deleteProject.bind(null,id)}/><Card><CardHeader><CardTitle>Revision history</CardTitle></CardHeader><CardContent className="space-y-3">{revisions.length?revisions.map(revision=>{const snapshot=revision.snapshot as Record<string,unknown>;return <div key={revision.id} className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-border p-4"><div><p className="font-semibold">{String(snapshot.title??project.title)}</p><p className="text-xs text-muted-foreground">Snapshot · {revision.createdAt.toLocaleString()}</p></div><form action={restoreProjectRevision.bind(null,id,revision.id)}><SubmitButton size="sm" variant="outline" pendingText="Restoring…">Restore</SubmitButton></form></div>}):<p className="text-sm text-muted-foreground">A snapshot is created automatically before each saved case-study update.</p>}</CardContent></Card></div>;
+}

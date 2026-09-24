@@ -1,2 +1,7 @@
-import { ContentCollection } from "@/components/site/content-collection";
-export const dynamic="force-dynamic"; export default function UsesPage(){return <ContentCollection type="USES" title="Tools & workflow" description="The tools, environments and engineering workflow I use to design, build, operate and reason about systems."/>}
+import type { Metadata } from "next";
+import { EditablePage } from "@/components/site/editable-page";
+import { getSitePage } from "@/lib/data";
+import { pageMetadata } from "@/lib/page-content";
+export const dynamic = "force-dynamic";
+export async function generateMetadata(): Promise<Metadata> { return pageMetadata(await getSitePage("uses")); }
+export default function Page(){return <EditablePage slug="uses"/>}

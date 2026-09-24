@@ -1,5 +1,6 @@
 export const CACHE_TAGS = {
   profile: "public-profile",
+  pages: "public-pages",
   posts: "public-posts",
   projects: "public-projects",
   experiences: "public-experiences",

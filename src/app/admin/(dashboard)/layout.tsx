@@ -13,11 +13,11 @@ export default async function AdminDashboardLayout({ children }: { children: Rea
   if (!session?.user?.id || session.user.role !== "ADMIN") redirect("/admin/login");
   const profile = await getPublicProfile();
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen w-full min-w-0 overflow-x-clip bg-background">
       <AdminNav name={session.user.name} portrait={profile.portrait} siteName={profile.siteName} />
       <Suspense><AdminToastListener /></Suspense>
-      <main className="px-5 py-8 sm:px-8 sm:py-10 lg:ml-64 lg:px-10 lg:py-12">
-        <div className="mx-auto w-full max-w-7xl [&>*]:mx-auto">{children}</div>
+      <main className="min-w-0 px-5 py-8 sm:px-8 sm:py-10 lg:ml-64 lg:px-10 lg:py-12">
+        <div className="mx-auto w-full min-w-0 max-w-7xl [&>*]:mx-auto">{children}</div>
       </main>
     </div>
   );

@@ -1,2 +1,7 @@
-import { ContentCollection } from "@/components/site/content-collection";
-export const dynamic="force-dynamic"; export default function NowPage(){return <ContentCollection type="NOW" title="What I’m working on now" description="A short, current snapshot of what I am building, learning and thinking about."/>}
+import type { Metadata } from "next";
+import { EditablePage } from "@/components/site/editable-page";
+import { getSitePage } from "@/lib/data";
+import { pageMetadata } from "@/lib/page-content";
+export const dynamic = "force-dynamic";
+export async function generateMetadata(): Promise<Metadata> { return pageMetadata(await getSitePage("now")); }
+export default function Page(){return <EditablePage slug="now"/>}

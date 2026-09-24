@@ -1,12 +1,14 @@
 import type { MetadataRoute } from "next";
-import { getPublicProfile } from "@/lib/data";
+import { getPublicProfile, getSitePage } from "@/lib/data";
+import { itemValue } from "@/lib/page-content";
 
 export const dynamic = "force-dynamic";
 
 export default async function manifest(): Promise<MetadataRoute.Manifest> {
-  const profile = await getPublicProfile();
+  const [profile, chrome] = await Promise.all([getPublicProfile(), getSitePage("site-chrome")]);
+  const nameTemplate = itemValue(chrome?.sectionMap.manifest, "nameTemplate");
   return {
-    name: `${profile.displayName} — Engineering Portfolio`,
+    name: nameTemplate.replace("{name}", profile.displayName || profile.siteName),
     short_name: profile.siteName,
     description: profile.eyebrow,
     start_url: "/",

@@ -74,7 +74,7 @@ export function sanitizeNewsletterHtml(input: string, baseUrl?: string) {
           return {
             tagName,
             attribs: {
-              alt: attribs.alt?.trim() || "Image unavailable",
+              alt: attribs.alt?.trim() || "",
               style: "display:block;max-width:100%;height:auto;border:0;margin:20px auto;",
             },
           };
@@ -84,7 +84,7 @@ export function sanitizeNewsletterHtml(input: string, baseUrl?: string) {
           attribs: {
             ...attribs,
             src,
-            alt: attribs.alt?.trim() || "Newsletter image",
+            alt: attribs.alt?.trim() || "",
             style: "display:block;max-width:100%;height:auto;border:0;margin:20px auto;",
           },
         };

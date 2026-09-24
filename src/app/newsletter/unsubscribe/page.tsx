@@ -1,11 +1,9 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { unsubscribe } from "./actions";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { getPublicProfile } from "@/lib/data";
-
-export default async function UnsubscribePage({ searchParams }: { searchParams: Promise<{ id?: string; token?: string; done?: string }> }) {
-  const params = await searchParams;
-  const profile = await getPublicProfile();
-  return <main className="section-space"><div className="container-shell max-w-xl"><Card><CardHeader><CardTitle>Newsletter preferences</CardTitle></CardHeader><CardContent>{params.done ? <><p className="text-muted-foreground">You have been unsubscribed.</p><Button asChild variant="outline" className="mt-6"><Link href="/">Return home</Link></Button></> : <><p className="text-muted-foreground">Confirm that you want to stop receiving {profile.siteName} engineering newsletters.</p><form action={unsubscribe} className="mt-6"><input type="hidden" name="id" value={params.id ?? ""} /><input type="hidden" name="token" value={params.token ?? ""} /><Button type="submit" variant="destructive">Unsubscribe</Button></form></>}</CardContent></Card></div></main>;
-}
+import { Card,CardContent,CardHeader,CardTitle } from "@/components/ui/card";
+import { getPublicProfile,getSitePage } from "@/lib/data";
+import { itemValue,pageMetadata } from "@/lib/page-content";
+export async function generateMetadata():Promise<Metadata>{return pageMetadata(await getSitePage("newsletter-unsubscribe"))}
+export default async function UnsubscribePage({searchParams}:{searchParams:Promise<{id?:string;token?:string;done?:string}>}){const[params,profile,page]=await Promise.all([searchParams,getPublicProfile(),getSitePage("newsletter-unsubscribe")]);if(!page)return null;return <main className="section-space"><div className="container-shell max-w-xl flex flex-col gap-8">{page.sections.map(section=>{if(section.component==="NEWSLETTER_UNSUBSCRIBE"){const prompt=itemValue(section,"promptBody").replace("{siteName}",profile.siteName);return <Card key={section.id}><CardHeader><CardTitle>{section.title}</CardTitle></CardHeader><CardContent>{params.done?<><p className="text-muted-foreground">{itemValue(section,"doneBody")}</p><Button asChild variant="outline" className="mt-6"><Link href={itemValue(section,"homeHref")||"/"}>{itemValue(section,"homeLabel")}</Link></Button></>:<><p className="text-muted-foreground">{prompt}</p><form action={unsubscribe} className="mt-6"><input type="hidden" name="id" value={params.id??""}/><input type="hidden" name="token" value={params.token??""}/><Button type="submit" variant="destructive">{itemValue(section,"submitLabel")}</Button></form></>}</CardContent></Card>}if(section.component==="RICH_TEXT")return <section key={section.id}>{section.title?<h2 className="text-2xl font-extrabold">{section.title}</h2>:null}{section.body?<div className="prose-portfolio mt-5" dangerouslySetInnerHTML={{__html:section.body}}/>:null}</section>;return null})}</div></main>}

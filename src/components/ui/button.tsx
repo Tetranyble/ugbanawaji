@@ -12,6 +12,7 @@ const buttonVariants = cva(
         secondary: "bg-card px-5 py-3 text-foreground shadow-neuro hover:-translate-y-0.5",
         outline: "border border-border bg-transparent px-5 py-3 hover:bg-muted",
         ghost: "px-3 py-2 hover:bg-muted",
+        link: "px-1 py-2 text-primary underline-offset-4 hover:underline",
         destructive: "bg-destructive px-4 py-2 text-white hover:bg-destructive/90",
       },
       size: {

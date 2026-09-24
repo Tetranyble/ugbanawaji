@@ -25,7 +25,9 @@ async function ensureMermaid(){
   loaded?.initialize({ startOnLoad:false, securityLevel:"strict", theme:"neutral" }); return loaded;
 }
 
-export function ArticleContentClient({ html }: { html:string }){
+export type ArticleContentCopy = { renderingDiagram: string; codeLabel: string; copyLabel: string; copiedLabel: string };
+
+export function ArticleContentClient({ html, copy }: { html:string; copy: ArticleContentCopy }){
   const ref=useRef<HTMLDivElement>(null);
   useEffect(()=>{
     const root=ref.current;if(!root)return;
@@ -34,13 +36,13 @@ export function ArticleContentClient({ html }: { html:string }){
       if(pre.dataset.enhanced)return; pre.dataset.enhanced="true"; const code=pre.querySelector("code"); if(!code)return;
       let text=code.textContent||"";
       if(text.startsWith("mermaid\n")){
-        const source=text.slice(8); const container=document.createElement("div"); container.className="mermaid-runtime rounded-xl border border-border bg-card p-4"; container.textContent="Rendering architecture diagram…"; pre.replaceWith(container);
+        const source=text.slice(8); const container=document.createElement("div"); container.className="mermaid-runtime rounded-xl border border-border bg-card p-4"; container.textContent=copy.renderingDiagram; pre.replaceWith(container);
         void ensureMermaid().then(async(m)=>{if(!m){container.textContent=source;return;}try{const out=await m.render(`mermaid-${Date.now()}-${index}`,source);container.innerHTML=out.svg;}catch{container.innerHTML=`<pre><code>${escapeHtml(source)}</code></pre>`;}}).catch(()=>{container.textContent=source;}); return;
       }
       let language=""; const marker=text.match(/^language:([a-zA-Z0-9+#._-]+)\n/); if(marker){language=marker[1].toLowerCase(); text=text.slice(marker[0].length); code.innerHTML=highlight(text,language); code.classList.add(`language-${language}`);}
       const wrapper=document.createElement("div"); wrapper.className="code-block-shell"; pre.parentNode?.insertBefore(wrapper,pre); wrapper.appendChild(pre);
-      const toolbar=document.createElement("div"); toolbar.className="code-block-toolbar"; const label=document.createElement("span");label.textContent=language||"code"; const button=document.createElement("button");button.type="button";button.textContent="Copy";button.addEventListener("click",()=>{void navigator.clipboard.writeText(text).then(()=>{button.textContent="Copied";window.setTimeout(()=>button.textContent="Copy",1200);});}); toolbar.append(label,button);wrapper.insertBefore(toolbar,pre);
+      const toolbar=document.createElement("div"); toolbar.className="code-block-toolbar"; const label=document.createElement("span");label.textContent=language||copy.codeLabel; const button=document.createElement("button");button.type="button";button.textContent=copy.copyLabel;button.addEventListener("click",()=>{void navigator.clipboard.writeText(text).then(()=>{button.textContent=copy.copiedLabel;window.setTimeout(()=>button.textContent=copy.copyLabel,1200);});}); toolbar.append(label,button);wrapper.insertBefore(toolbar,pre);
     });
-  },[html]);
+  },[html,copy]);
   return <div ref={ref} dangerouslySetInnerHTML={{__html:html}}/>;
 }

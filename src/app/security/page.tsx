@@ -1,2 +1,7 @@
-export const metadata={title:"Security"};
-export default function SecurityPage(){return <main className="section-space"><article className="container-shell max-w-3xl"><p className="section-kicker">Security</p><h1 className="section-title mt-3">Responsible disclosure</h1><div className="prose-portfolio mt-8"><p>I value responsible security research. If you believe you have found a vulnerability in ugbanawaji.com, please report it privately rather than publishing exploitation details before there is an opportunity to investigate.</p><h2>What to include</h2><ul><li>A clear description of the issue and affected URL or feature.</li><li>Reproduction steps that avoid accessing other users’ data.</li><li>Impact and any relevant request/response details.</li></ul><h2>Please avoid</h2><ul><li>Destructive testing, denial-of-service activity or social engineering.</li><li>Accessing, changing or retaining data that is not yours.</li><li>Automated scanning that creates excessive traffic.</li></ul><p>Security contact: <a href="mailto:u.ekenekiso@ugbanawaji.com">u.ekenekiso@ugbanawaji.com</a></p></div></article></main>}
+import type { Metadata } from "next";
+import { EditablePage } from "@/components/site/editable-page";
+import { getSitePage } from "@/lib/data";
+import { pageMetadata } from "@/lib/page-content";
+export const dynamic = "force-dynamic";
+export async function generateMetadata(): Promise<Metadata> { return pageMetadata(await getSitePage("security")); }
+export default function Page(){return <EditablePage slug="security"/>}

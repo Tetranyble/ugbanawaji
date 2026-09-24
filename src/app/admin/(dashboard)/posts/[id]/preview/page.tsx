@@ -16,7 +16,7 @@ export default async function PreviewPostPage({ params }: { params: Promise<{ id
   if (!post) notFound();
   const taxonomy = (await getTaxonomyForPosts([id])).get(id) ?? { categories: [], tags: [] };
   return <div className="mx-auto max-w-4xl">
-    <div className="mb-8 flex items-center justify-between gap-3"><div><p className="section-kicker">Private preview</p><p className="mt-1 text-sm text-muted-foreground">{post.status}{post.publishedAt ? ` · ${formatDateTime(post.publishedAt)}` : ""}</p></div><Button asChild variant="outline"><Link href={`/admin/posts/${id}`}>Back to editor</Link></Button></div>
+    <div className="mb-8 flex flex-col items-start gap-3 sm:flex-row sm:items-center sm:justify-between"><div className="min-w-0"><p className="section-kicker">Private preview</p><p className="mt-1 text-sm text-muted-foreground">{post.status}{post.publishedAt ? ` · ${formatDateTime(post.publishedAt)}` : ""}</p></div><Button asChild variant="outline" className="shrink-0"><Link href={`/admin/posts/${id}`}>Back to editor</Link></Button></div>
     <article>
       <header className="border-b border-border pb-10">
         <div className="flex flex-wrap gap-2">{taxonomy.categories.map((item) => <Badge key={item} className="border-primary/20 bg-primary/10 text-primary">{item}</Badge>)}{taxonomy.tags.map((item) => <Badge key={item}>{item}</Badge>)}</div>

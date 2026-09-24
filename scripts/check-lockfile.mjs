@@ -50,9 +50,7 @@ for (const packagePath of Object.keys(lock.packages ?? {})) {
   }
 }
 
-const nodemailer = lock.packages?.["node_modules/nodemailer"]?.version;
-if (!nodemailer) fail("nodemailer is missing from the resolved dependency graph.");
-else if (Number(nodemailer.split(".")[0]) < 9) fail(`nodemailer ${nodemailer} is below the required major version 9.`);
+if (lock.packages?.["node_modules/nodemailer"]) fail("nodemailer must not be present; mail uses the vendor-neutral emailjs SMTP transport.");
 
 for (const name of ["better-auth", "@better-auth/drizzle-adapter"]) {
   const resolved = lock.packages?.[`node_modules/${name}`]?.version;

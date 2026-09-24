@@ -1,31 +1,11 @@
 import Link from "next/link";
 import { Mail } from "lucide-react";
 import { GitHubIcon, LinkedInIcon } from "@/components/site/brand-icons";
-import { profile as defaultProfile } from "@/content/profile";
+import type { NavigationItem, PortfolioProfile } from "@/lib/portfolio-types";
+import type { SiteChromeCopy } from "@/components/site/site-chrome-copy";
 
-export function SiteFooter({ profile = defaultProfile }: { profile?: typeof defaultProfile }) {
-  return (
-    <footer className="border-t border-border py-10">
-      <div className="container-shell flex flex-col gap-6 text-sm text-muted-foreground sm:flex-row sm:items-center sm:justify-between">
-        <div>
-          <p>© {new Date().getFullYear()} {profile.displayName}. Built with Next.js and MySQL.</p>
-          <p className="mt-1 text-xs">{profile.eyebrow}</p>
-        </div>
-        <div className="flex flex-wrap items-center gap-4">
-          <Link href="/hire" className="hover:text-primary">Hire</Link>
-          <Link href="/ask" className="hover:text-primary">Ask AI</Link>
-          <Link href="/uses" className="hover:text-primary">Uses</Link>
-          <Link href="/now" className="hover:text-primary">Now</Link>
-          <Link href="/newsletter/archive" className="hover:text-primary">Newsletter</Link>
-          <Link href="/changelog" className="hover:text-primary">Changelog</Link>
-          <Link href="/privacy" className="hover:text-primary">Privacy</Link>
-          <Link href="/security" className="hover:text-primary">Security</Link>
-          <Link href={profile.linkedin} target="_blank" aria-label="LinkedIn" className="hover:text-primary"><LinkedInIcon className="size-4" /></Link>
-          {profile.github ? <Link href={profile.github} target="_blank" aria-label="GitHub" className="hover:text-primary"><GitHubIcon className="size-4" /></Link> : null}
-          <Link href={`mailto:${profile.email}`} aria-label="Email" className="hover:text-primary"><Mail className="size-4" /></Link>
-          <Link href="/admin/login" className="hover:text-primary">Admin</Link>
-        </div>
-      </div>
-    </footer>
-  );
+export function SiteFooter({ profile, navigation, copy }: { profile: PortfolioProfile; navigation: NavigationItem[]; copy: SiteChromeCopy["footer"] }) {
+  const footerNav = navigation.filter((item) => item.placement === "FOOTER");
+  const copyright=copy.copyright.replace("{year}",String(new Date().getFullYear())).replace("{name}",profile.displayName||profile.siteName);
+  return <footer className="border-t border-border py-10"><div className="container-shell flex flex-col gap-6 text-sm text-muted-foreground sm:flex-row sm:items-center sm:justify-between"><div><p>{copyright}</p><p className="mt-1 text-xs">{profile.eyebrow}</p></div><div className="flex flex-wrap items-center gap-4">{footerNav.map((item)=><Link key={item.id} href={item.href} target={item.external?"_blank":undefined} className="hover:text-primary">{item.label}</Link>)}{profile.linkedin?<Link href={profile.linkedin} target="_blank" aria-label={copy.linkedinAria} className="hover:text-primary"><LinkedInIcon className="size-4" /></Link>:null}{profile.github?<Link href={profile.github} target="_blank" aria-label={copy.githubAria} className="hover:text-primary"><GitHubIcon className="size-4" /></Link>:null}{profile.email?<Link href={`mailto:${profile.email}`} aria-label={copy.emailAria} className="hover:text-primary"><Mail className="size-4" /></Link>:null}{copy.adminLabel?<Link href={copy.adminHref} className="hover:text-primary">{copy.adminLabel}</Link>:null}</div></div></footer>;
 }

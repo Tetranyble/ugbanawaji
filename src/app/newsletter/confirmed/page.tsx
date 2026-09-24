@@ -1,9 +1,8 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-
-export default async function NewsletterConfirmedPage({ searchParams }: { searchParams: Promise<{ status?: string }> }) {
-  const { status } = await searchParams;
-  const success = status === "success";
-  return <main className="section-space"><div className="container-shell max-w-xl"><Card><CardHeader><CardTitle>{success ? "Subscription confirmed" : "Confirmation link unavailable"}</CardTitle></CardHeader><CardContent><p className="text-muted-foreground">{success ? "You’ll now receive occasional engineering notes when a newsletter is published." : status === "expired" ? "That confirmation link has expired. Subscribe again to receive a new one." : "The confirmation link is invalid or incomplete."}</p><Button asChild className="mt-6"><Link href="/blog">Back to technical writing</Link></Button></CardContent></Card></div></main>;
-}
+import { Card,CardContent,CardHeader,CardTitle } from "@/components/ui/card";
+import { getSitePage } from "@/lib/data";
+import { itemValue,pageMetadata } from "@/lib/page-content";
+export async function generateMetadata():Promise<Metadata>{return pageMetadata(await getSitePage("newsletter-confirmed"))}
+export default async function NewsletterConfirmedPage({searchParams}:{searchParams:Promise<{status?:string}>}){const[{status},page]=await Promise.all([searchParams,getSitePage("newsletter-confirmed")]);if(!page)return null;const success=status==="success";const expired=status==="expired";return <main className="section-space"><div className="container-shell max-w-xl flex flex-col gap-8">{page.sections.map(section=>{if(section.component==="STATUS_MESSAGE"){const title=success?itemValue(section,"successTitle"):itemValue(section,"errorTitle");const body=success?itemValue(section,"successBody"):expired?itemValue(section,"expiredBody"):itemValue(section,"errorBody");return <Card key={section.id}><CardHeader><CardTitle>{title}</CardTitle></CardHeader><CardContent><p className="text-muted-foreground">{body}</p><Button asChild className="mt-6"><Link href={itemValue(section,"homeHref")||"/"}>{itemValue(section,"homeLabel")}</Link></Button></CardContent></Card>}if(section.component==="RICH_TEXT")return <section key={section.id}>{section.title?<h2 className="text-2xl font-extrabold">{section.title}</h2>:null}{section.body?<div className="prose-portfolio mt-5" dangerouslySetInnerHTML={{__html:section.body}}/>:null}</section>;return null})}</div></main>}

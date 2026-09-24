@@ -7,19 +7,28 @@ function Empty({ children }: { children: React.ReactNode }) {
   return <p className="text-sm leading-6 text-muted-foreground">{children}</p>;
 }
 
+function RankingList({ items, empty }: { items: Array<{ label: string | null; views: number }>; empty: string }) {
+  return items.length ? items.map((item, index) => (
+    <div key={`${item.label ?? "unknown"}-${index}`} className="flex justify-between gap-4 text-sm">
+      <span className="truncate text-muted-foreground">{item.label ?? "Unknown"}</span>
+      <strong>{item.views}</strong>
+    </div>
+  )) : <Empty>{empty}</Empty>;
+}
+
 export default async function AnalyticsPage() {
   let data: Awaited<ReturnType<typeof getAnalyticsSummary>>;
   try {
     data = await getAnalyticsSummary(30);
   } catch {
-    data = { total: 0, sessions: 0, topPages: [], topReferrers: [], topSearches: [], topCountries: [], trafficTrend: [], activeSubscribers: 0, newSubscribers: 0, contactInquiries: 0, opportunityInquiries: 0, newsletterSent: 0, newsletterFailed: 0, days: 30 };
+    data = { total: 0, sessions: 0, topPages: [], topReferrers: [], topSearches: [], topCountries: [], topCities: [], topSources: [], topCampaigns: [], topDevices: [], topBrowsers: [], trafficTrend: [], analyticsSource: "first-party", lastSyncedAt: null, activeSubscribers: 0, newSubscribers: 0, contactInquiries: 0, opportunityInquiries: 0, newsletterSent: 0, newsletterFailed: 0, days: 30 };
   }
 
   const deliveryTotal = data.newsletterSent + data.newsletterFailed;
   const deliveryRate = deliveryTotal ? Math.round((data.newsletterSent / deliveryTotal) * 100) : 0;
   const stats = [
-    [Eye, "Page views", data.total, "Last 30 days"],
-    [UsersRound, "Anonymous sessions", data.sessions, "No raw IP storage"],
+    [Eye, "Page views", data.total, data.analyticsSource === "mixpanel" ? "Synced from Mixpanel" : "First-party events"],
+    [UsersRound, "Anonymous sessions", data.sessions, "Visitor IDs are hashed locally"],
     [Mail, "Active subscribers", data.activeSubscribers, `+${data.newSubscribers} in 30 days`],
     [MessageSquare, "Contact enquiries", data.contactInquiries, `${data.opportunityInquiries} high-intent`],
     [BarChart3, "Newsletter delivered", data.newsletterSent, deliveryTotal ? `${deliveryRate}% successful` : "No deliveries yet"],
@@ -27,10 +36,13 @@ export default async function AnalyticsPage() {
   ] as const;
   const trend = data.trafficTrend.slice(-14);
   const maxViews = Math.max(1, ...trend.map((item) => item.views));
+  const lastSync = data.lastSyncedAt
+    ? new Intl.DateTimeFormat("en-GB", { dateStyle: "medium", timeStyle: "short", timeZone: "Africa/Lagos" }).format(new Date(data.lastSyncedAt))
+    : null;
 
   return (
     <div className="max-w-7xl">
-      <AdminPageHeader eyebrow="First-party analytics" title="Audience, publishing & opportunity signals" description="Privacy-conscious metrics owned by this application. Raw IP addresses and invasive browser fingerprints are not stored." />
+      <AdminPageHeader eyebrow="Owned analytics" title="Audience, publishing & opportunity signals" description={`Traffic data is stored in this application's database${lastSync ? ` and was last synced from Mixpanel on ${lastSync}` : " using first-party events until the first Mixpanel sync runs"}. Raw visitor identifiers and IP addresses are not retained.`} />
 
       <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
         {stats.map(([Icon, label, value, note]) => <Card key={label} className="shadow-none"><CardContent className="flex items-center justify-between gap-5 p-5"><div><p className="text-3xl font-extrabold text-primary">{value}</p><p className="mt-1 font-semibold">{label}</p><p className="mt-1 text-xs text-muted-foreground">{note}</p></div><div className="grid size-11 place-items-center rounded-xl bg-muted"><Icon className="size-4 text-primary" /></div></CardContent></Card>)}
@@ -50,6 +62,14 @@ export default async function AnalyticsPage() {
         <Card className="shadow-none"><CardHeader><CardTitle>Site searches</CardTitle></CardHeader><CardContent className="space-y-3">{data.topSearches.length ? data.topSearches.map((item) => <div key={item.query || "empty"} className="flex justify-between gap-4 text-sm"><span className="truncate text-muted-foreground">{item.query || "—"}</span><strong>{item.searches}</strong></div>) : <Empty>No searches yet.</Empty>}</CardContent></Card>
         <Card className="shadow-none"><CardHeader><CardTitle>Referrers</CardTitle></CardHeader><CardContent className="space-y-3">{data.topReferrers.length ? data.topReferrers.map((item) => <div key={item.referrerHost ?? "direct"} className="flex justify-between gap-4 text-sm"><span className="truncate text-muted-foreground">{item.referrerHost ?? "Direct"}</span><strong>{item.views}</strong></div>) : <Empty>No external referrers recorded yet.</Empty>}</CardContent></Card>
         <Card className="shadow-none"><CardHeader><CardTitle>Countries</CardTitle></CardHeader><CardContent className="space-y-3">{data.topCountries.length ? data.topCountries.map((item) => <div key={item.country ?? "unknown"} className="flex justify-between gap-4 text-sm"><span className="text-muted-foreground">{item.country ?? "Unknown"}</span><strong>{item.views}</strong></div>) : <Empty>Country appears only when the hosting edge provides a coarse country header.</Empty>}</CardContent></Card>
+      </div>
+
+      <div className="mt-6 grid gap-6 sm:grid-cols-2 xl:grid-cols-3">
+        <Card className="shadow-none"><CardHeader><CardTitle>Traffic sources</CardTitle><CardDescription>UTM source or referring domain.</CardDescription></CardHeader><CardContent className="space-y-3"><RankingList items={data.topSources} empty="Source data will appear after the Mixpanel sync." /></CardContent></Card>
+        <Card className="shadow-none"><CardHeader><CardTitle>Campaigns</CardTitle><CardDescription>Visits grouped by utm_campaign.</CardDescription></CardHeader><CardContent className="space-y-3"><RankingList items={data.topCampaigns} empty="No campaign-tagged visits yet." /></CardContent></Card>
+        <Card className="shadow-none"><CardHeader><CardTitle>Cities</CardTitle><CardDescription>Approximate location supplied by Mixpanel.</CardDescription></CardHeader><CardContent className="space-y-3"><RankingList items={data.topCities} empty="No city data has been synced yet." /></CardContent></Card>
+        <Card className="shadow-none"><CardHeader><CardTitle>Devices</CardTitle></CardHeader><CardContent className="space-y-3"><RankingList items={data.topDevices} empty="No device data has been synced yet." /></CardContent></Card>
+        <Card className="shadow-none"><CardHeader><CardTitle>Browsers</CardTitle></CardHeader><CardContent className="space-y-3"><RankingList items={data.topBrowsers} empty="No browser data has been synced yet." /></CardContent></Card>
       </div>
     </div>
   );

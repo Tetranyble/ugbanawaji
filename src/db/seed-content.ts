@@ -1,0 +1,855 @@
+export const seededProfile = {
+  id: "main",
+  siteName: "Ugbanawaji",
+  name: "Ekenekiso Ugbanawaji Leonard",
+  displayName: "Leonard Ekenekiso",
+  location: "Lagos, Nigeria",
+  email: "u.ekenekiso@ugbanawaji.com",
+  phone: "+234 806 660 7729",
+  domain: "https://ugbanawaji.com",
+  linkedin: "https://www.linkedin.com/in/ugbanawaji",
+  github: "https://github.com/Tetranyble",
+  resume: "/Leonard-Ekenekiso-Java-Spring-Boot-Resume.pdf",
+  portrait: "/leonard-ekenekiso.jpg",
+  eyebrow: "Backend Software Engineer",
+  headline: "I build reliable backend systems for financial products and integration-heavy platforms.",
+  intro: "I work primarily with Java and Spring Boot, building APIs, transaction workflows, integrations and backend services that need to behave predictably in production. My background also includes substantial PHP/Laravel work, and I use React and TypeScript when broader product ownership is needed.",
+  currentFocus: "Building and maintaining Java/Spring Boot services, financial integrations and transaction-heavy backend systems, while applying the same engineering principles to agentic and LLM-backed applications.",
+  contactIntro: "I’m interested in backend engineering roles involving Java, Spring Boot, financial systems, integrations and platform engineering. I’m also open to selected PHP/Laravel work where my earlier backend depth is useful.",
+};
+
+export const seededFocusAreas = [
+  {
+    title: "Backend Systems",
+    description: "Designing and building APIs, application services, persistence layers and business workflows for production systems.",
+    icon: "blocks",
+    tags: ["Java", "Spring Boot", "JPA/Hibernate", "REST APIs"],
+  },
+  {
+    title: "Financial & Transactional Systems",
+    description: "Backend services involving payments, banking integrations, credit workflows and transaction processing where correctness and traceability matter.",
+    icon: "building",
+    tags: ["Payments", "Transactions", "Banking APIs", "Reconciliation"],
+  },
+  {
+    title: "Integrations & Reliability",
+    description: "Connecting systems to external services while accounting for retries, duplicate requests, background processing, failure handling and operational recovery.",
+    icon: "network",
+    tags: ["Redis", "Idempotency", "Async Processing", "Observability"],
+  },
+  {
+    title: "Applied AI",
+    description: "Integrating LLM and agentic capabilities into backend applications with persistent state, controlled execution and conventional application architecture around them.",
+    icon: "sparkles",
+    tags: ["Java", "LangChain4j", "LLM Integration", "Agentic Workflows"],
+  },
+] as const;
+
+export const seededAbout = [
+  "I’m a backend software engineer focused on Java/Spring Boot and production backend systems. Much of my recent work has involved financial products, integrations and transaction-heavy applications.",
+  "I also have a strong PHP/Laravel background and work with React and TypeScript when a product requires broader ownership. More recently, I’ve been working with LangChain4j and agentic systems from a backend-engineering perspective.",
+  "Outside work, I enjoy gaming, especially arcade and adventure games.",
+];
+
+export const seededSkillGroups = [
+  { title: "Primary", items: ["Java", "Spring Boot", "JPA/Hibernate"] },
+  { title: "Backend & Data", items: ["MySQL", "PostgreSQL", "Redis", "REST APIs"] },
+  { title: "Infrastructure", items: ["Docker", "AWS", "Linux", "CI/CD"] },
+  { title: "Supporting", items: ["PHP", "Laravel", "TypeScript", "React", "Next.js"] },
+  { title: "Applied AI", items: ["LangChain4j", "LLM Integration", "Agentic Workflows"] },
+] as const;
+
+export const seededEducation = [
+  { type: "EDUCATION" as const, title: "B.Tech, Electrical / Electronic Engineering", institution: "Rivers State University of Science and Technology", year: "2019", detail: null },
+  { type: "CERTIFICATION" as const, title: "Microsoft Certified: Azure Fundamentals", institution: "Microsoft", year: "2022", detail: null },
+];
+
+export const seededNavigation = [
+  { placement: "HEADER" as const, label: "Focus", href: "/#expertise", external: false, sortOrder: 100 },
+  { placement: "HEADER" as const, label: "Work", href: "/work", external: false, sortOrder: 90 },
+  { placement: "HEADER" as const, label: "Experience", href: "/#experience", external: false, sortOrder: 80 },
+  { placement: "HEADER" as const, label: "Writing", href: "/blog", external: false, sortOrder: 70 },
+  { placement: "HEADER" as const, label: "Principles", href: "/principles", external: false, sortOrder: 60 },
+  { placement: "HEADER" as const, label: "Ask AI", href: "/ask", external: false, sortOrder: 50 },
+  { placement: "HEADER" as const, label: "About", href: "/#about", external: false, sortOrder: 40 },
+  { placement: "HEADER_CTA" as const, label: "Let’s talk", href: "/#contact", external: false, sortOrder: 100 },
+  { placement: "MOBILE" as const, label: "Focus", href: "/#expertise", external: false, sortOrder: 100 },
+  { placement: "MOBILE" as const, label: "Case studies", href: "/work", external: false, sortOrder: 90 },
+  { placement: "MOBILE" as const, label: "Experience", href: "/#experience", external: false, sortOrder: 80 },
+  { placement: "MOBILE" as const, label: "Technical writing", href: "/blog", external: false, sortOrder: 70 },
+  { placement: "MOBILE" as const, label: "Engineering principles", href: "/principles", external: false, sortOrder: 60 },
+  { placement: "MOBILE" as const, label: "Ask Ugbanawaji", href: "/ask", external: false, sortOrder: 50 },
+  { placement: "MOBILE" as const, label: "Hire", href: "/hire", external: false, sortOrder: 40 },
+  { placement: "MOBILE" as const, label: "About", href: "/#about", external: false, sortOrder: 30 },
+  { placement: "MOBILE" as const, label: "Contact", href: "/#contact", external: false, sortOrder: 20 },
+  { placement: "FOOTER" as const, label: "Hire", href: "/hire", external: false, sortOrder: 100 },
+  { placement: "FOOTER" as const, label: "Ask AI", href: "/ask", external: false, sortOrder: 90 },
+  { placement: "FOOTER" as const, label: "Uses", href: "/uses", external: false, sortOrder: 80 },
+  { placement: "FOOTER" as const, label: "Now", href: "/now", external: false, sortOrder: 70 },
+  { placement: "FOOTER" as const, label: "Newsletter", href: "/newsletter/archive", external: false, sortOrder: 60 },
+  { placement: "FOOTER" as const, label: "Privacy", href: "/privacy", external: false, sortOrder: 50 },
+  { placement: "FOOTER" as const, label: "Security", href: "/security", external: false, sortOrder: 40 },
+] as const;
+
+export const seededAskStarterPrompts = [
+  { label: "Financial systems", question: "What financial and transaction-heavy systems has Leonard worked on?" },
+  { label: "Java & Spring", question: "Show me Leonard's Java and Spring Boot experience." },
+  { label: "System reliability", question: "How does Leonard approach reliability and failure handling?" },
+  { label: "Applied AI", question: "What AI-backed systems has Leonard delivered or built?" },
+] as const;
+
+export const seededPages = [
+  {
+    slug: "site-chrome", route: "/__site-chrome", title: "Site chrome", seoTitle: null, seoDescription: null,
+    sections: [
+      { key: "header", component: "SITE_HEADER", sortOrder: 100, items: [
+        { key: "homeAria", value: "{name} home" }, { key: "mainNavAria", value: "Main navigation" },
+      ] },
+      { key: "mobile", component: "MOBILE_NAV", sortOrder: 90, items: [
+        { key: "openAria", value: "Open navigation" }, { key: "closeAria", value: "Close navigation" }, { key: "navAria", value: "Mobile navigation" },
+      ] },
+      { key: "theme", component: "THEME_TOGGLE", sortOrder: 80, items: [
+        { key: "chooseAria", value: "Choose theme" }, { key: "systemLabel", value: "System" }, { key: "lightLabel", value: "Light" }, { key: "darkLabel", value: "Dark" },
+      ] },
+      { key: "article", component: "SYSTEM_COPY", sortOrder: 75, items: [
+        { key: "renderingDiagram", value: "Rendering architecture diagram…" },
+        { key: "codeLabel", value: "code" },
+        { key: "copyLabel", value: "Copy" },
+        { key: "copiedLabel", value: "Copied" },
+      ] },
+      { key: "footer", component: "SITE_FOOTER", sortOrder: 70, items: [
+        { key: "copyright", value: "© {year} {name}. Built with Next.js and MySQL." }, { key: "linkedinAria", value: "LinkedIn" }, { key: "githubAria", value: "GitHub" }, { key: "emailAria", value: "Email" },
+      ], actions: [{ key: "admin", label: "Admin", href: "/admin/login", variant: "LINK" as const, external: false }] },
+      { key: "manifest", component: "SYSTEM_COPY", sortOrder: 60, items: [
+        { key: "nameTemplate", value: "{name} — Engineering Portfolio" },
+      ] },
+      { key: "feeds", component: "SYSTEM_COPY", sortOrder: 50, items: [
+        { key: "titleTemplate", value: "{name} — {title}" },
+        { key: "topicDescriptionTemplate", value: "Topic feed for {topic}" },
+      ] },
+      { key: "securityTxt", component: "SYSTEM_COPY", sortOrder: 40, items: [
+        { key: "contactLabel", value: "Contact" },
+        { key: "preferredLanguagesLabel", value: "Preferred-Languages" },
+        { key: "canonicalLabel", value: "Canonical" },
+        { key: "policyLabel", value: "Policy" },
+        { key: "expiresLabel", value: "Expires" },
+        { key: "preferredLanguages", value: "en" },
+        { key: "policyPath", value: "/security" },
+      ] },
+    ],
+  },
+  {
+    slug: "newsletter-system", route: "/__newsletter-system", title: "Newsletter system copy", seoTitle: null, seoDescription: null,
+    sections: [{ key: "messages", component: "SYSTEM_COPY", sortOrder: 100, items: [
+      { key: "invalidEmail", value: "Enter a valid email address." }, { key: "tooFast", value: "Please take a moment and try again." }, { key: "disposableEmail", value: "Please use a regular email address." }, { key: "rateLimited", value: "Too many subscription attempts. Please try again later." }, { key: "alreadySubscribed", value: "You’re already subscribed." }, { key: "recentlySent", value: "A confirmation email was sent recently. Check your inbox." }, { key: "localLog", value: "Local email delivery is in log mode. Use the button below to complete the double opt-in." }, { key: "checkInbox", value: "Check your inbox and confirm your subscription." }, { key: "sendFailed", value: "Your subscription was saved, but the confirmation email could not be sent. Please try again shortly." },
+      { key: "emailSubject", value: "Confirm your {siteName} newsletter subscription" }, { key: "emailIntro", value: "Confirm that you want occasional engineering notes from {siteName}." }, { key: "emailConfirmLabel", value: "Confirm subscription" }, { key: "emailExpiry", value: "This confirmation link expires in 24 hours." }, { key: "emailText", value: "Confirm your subscription: {confirmUrl}" },
+    ] }],
+  },
+  {
+    slug: "home",
+    route: "/",
+    title: "Backend Software Engineer",
+    seoTitle: "Leonard Ekenekiso — Backend Software Engineer",
+    seoDescription: "Backend Software Engineer focused on Java/Spring Boot, financial systems, integrations and reliable production backends.",
+    sections: [
+      { key: "metadata", component: "SYSTEM_COPY", sortOrder: -1000, items: [
+        { key: "keywords", value: "Backend Software Engineer, Java, Spring Boot, PHP, Laravel, Fintech, Payments, System Integration, LangChain4j, Applied AI, Nigeria" },
+        { key: "titleTemplate", value: "%s | {name}" },
+      ] },
+      { key: "hero", component: "HOME_HERO", sortOrder: 120, items: [
+        { key: "linkedinLabel", value: "LinkedIn" },
+        { key: "portraitAlt", value: "Portrait of {name}" },
+      ], actions: [
+        { key: "work", label: "View selected work", href: "#work", variant: "PRIMARY" as const, external: false },
+        { key: "resume", label: "Download CV", href: "/Leonard-Ekenekiso-Java-Spring-Boot-Resume.pdf", variant: "SECONDARY" as const, external: false },
+      ] },
+      { key: "snapshot", component: "HOME_SNAPSHOT", eyebrow: "engineering.snapshot", title: "Current focus", sortOrder: 110, items: [
+        { key: "java", value: "Java / Spring Boot" },
+        { key: "financial", value: "Financial Systems" },
+        { key: "architecture", value: "Backend Architecture" },
+        { key: "ai", value: "Applied AI" },
+      ] },
+      { key: "expertise", component: "FOCUS_AREAS", eyebrow: "What I work on", title: "Backend work across applications, integrations and production systems.", description: "Most of my work sits around business logic, APIs, databases, integrations and the things required to keep a backend predictable in production.", sortOrder: 100 },
+      { key: "work", component: "FEATURED_PROJECTS", eyebrow: "Selected work", title: "Systems and products I’ve worked on.", description: "Some professional systems are private, so the case studies focus on the problem, my contribution and the engineering decisions without exposing confidential implementation details.", sortOrder: 90, itemLimit: 3, actions: [
+        { key: "all", label: "All case studies", href: "/work", variant: "OUTLINE" as const, external: false },
+        { key: "item", label: "Read case study", href: "", variant: "OUTLINE" as const, external: false },
+      ] },
+      { key: "approach", component: "PRINCIPLES", eyebrow: "Engineering approach", title: "I prefer backend systems that are easy to reason about when things go wrong.", description: "Clear boundaries, explicit failure paths, sensible persistence and enough observability to understand what is happening in production.", sortOrder: 80, itemLimit: 4, actions: [
+        { key: "all", label: "How I engineer systems", href: "/principles", variant: "OUTLINE" as const, external: false },
+      ] },
+      { key: "building", component: "CURRENT_PROJECTS", eyebrow: "Currently building", title: "Projects and systems that are actively taking shape.", sortOrder: 70, itemLimit: 4, items: [
+        { key: "PRODUCTION", value: "Production" },
+        { key: "ACTIVE_DEVELOPMENT", value: "Active Development" },
+        { key: "RESEARCH", value: "Research" },
+        { key: "OPEN_SOURCE", value: "Open Source" },
+        { key: "ARCHIVED", value: "Archived" },
+      ], actions: [
+        { key: "item", label: "See current direction", href: "", variant: "OUTLINE" as const, external: false },
+      ] },
+      { key: "experience", component: "EXPERIENCE", eyebrow: "Experience", title: "Backend engineering across financial systems, integrations and product platforms.", sortOrder: 60, items: [
+        { key: "filterAll", value: "All" },
+        { key: "present", value: "Present" },
+      ] },
+      { key: "about", component: "ABOUT", eyebrow: "About", title: "Backend engineering is the common thread across the systems I build.", sortOrder: 50 },
+      { key: "about_card", component: "BACKGROUND_CARD", title: "Background", description: "Education and the tools I use most often.", sortOrder: 49, actions: [
+        { key: "resume", label: "Full résumé", href: "/Leonard-Ekenekiso-Java-Spring-Boot-Resume.pdf", variant: "SECONDARY" as const, external: false },
+      ], items: [
+        { key: "educationLabel", value: "Education" },
+        { key: "certificationLabel", value: "Certification" },
+      ] },
+      { key: "writing", component: "WRITING", eyebrow: "Technical writing", title: "Notes from building and operating systems.", sortOrder: 40, itemLimit: 3, items: [{ key: "minuteLabel", value: "min read" }], actions: [
+        { key: "all", label: "All writing", href: "/blog", variant: "OUTLINE" as const, external: false },
+        { key: "item", label: "Read article", href: "", variant: "LINK" as const, external: false },
+      ] },
+      { key: "ai", component: "ASK_AI", eyebrow: "Applied AI in practice", title: "Ask about my engineering work.", description: "The assistant is grounded only in published case studies, experience, principles and technical writing, and links answers back to supporting evidence.", sortOrder: 30, actions: [
+        { key: "ask", label: "Ask about my work", href: "/ask", variant: "PRIMARY" as const, external: false },
+      ] },
+      { key: "contact", component: "CONTACT", eyebrow: "Contact", title: "Have a backend problem worth solving?", description: "I’m interested in backend engineering roles involving Java, Spring Boot, financial systems, integrations and platform engineering. I’m also open to selected PHP/Laravel work where my earlier backend depth is useful.", sortOrder: 20, items: [
+        { key: "emailLabel", value: "Email" },
+        { key: "locationLabel", value: "Location" },
+        { key: "nameLabel", value: "Name" },
+        { key: "emailFieldLabel", value: "Email" },
+        { key: "subjectLabel", value: "Subject" },
+        { key: "subjectPlaceholder", value: "What would you like to discuss?" },
+        { key: "messageLabel", value: "Message" },
+        { key: "submitLabel", value: "Send message" },
+        { key: "sendingLabel", value: "Sending…" },
+        { key: "successTitle", value: "Message sent" },
+        { key: "errorTitle", value: "Message not sent" },
+        { key: "invalidTitle", value: "Please check the form" },
+        { key: "invalidDescription", value: "Fix the highlighted fields and try again." },
+        { key: "nameError", value: "Enter your name." },
+        { key: "emailError", value: "Enter a valid email address." },
+        { key: "subjectError", value: "Check the subject and try again." },
+        { key: "messageError", value: "Enter a message with at least 10 characters." },
+        { key: "serverInvalid", value: "Please check the form and try again." },
+        { key: "serverTooFast", value: "Please take a moment and try again." },
+        { key: "serverDisposable", value: "Please use a regular email address for professional enquiries." },
+        { key: "serverRateLimited", value: "Too many messages were submitted from this network. Please try again later." },
+        { key: "serverSuccess", value: "Thanks — your message has been received." },
+        { key: "serverUnavailable", value: "The contact form is unavailable right now. Please email me directly instead." },
+        { key: "mailSubjectWithSubject", value: "Portfolio message: {subject}" },
+        { key: "mailSubjectWithoutSubject", value: "Portfolio message from {name}" },
+        { key: "mailFromLabel", value: "From" },
+        { key: "mailMessageIdLabel", value: "Message ID" },
+      ] },
+    ],
+  },
+  {
+    slug: "work", route: "/work", title: "Selected Work", seoTitle: "Selected Engineering Work", seoDescription: "Case studies covering backend systems, financial platforms, integrations and applied AI.",
+    sections: [
+      { key: "hero", component: "PAGE_HERO", eyebrow: "Case studies", title: "Engineering decisions, trade-offs and outcomes.", description: "Sanitized case studies focus on the problem, my contribution and the engineering reasoning without exposing employer-confidential implementation details.", sortOrder: 100 },
+      { key: "projects", component: "PROJECT_LIST", sortOrder: 90, items: [
+        { key: "readLabel", value: "Read case study" },
+        { key: "emptyTitle", value: "Case studies are being prepared" },
+        { key: "emptyDescription", value: "Published case studies will appear here as they are ready." },
+        { key: "PRODUCTION", value: "Production" },
+        { key: "ACTIVE_DEVELOPMENT", value: "Active Development" },
+        { key: "RESEARCH", value: "Research" },
+        { key: "OPEN_SOURCE", value: "Open Source" },
+        { key: "ARCHIVED", value: "Archived" },
+      ] },
+    ],
+  },
+  {
+    slug: "project-detail", route: "/work/[slug]", title: "Case Study", seoTitle: null, seoDescription: null,
+    sections: [
+      { key: "header", component: "PROJECT_HEADER", sortOrder: 100, items: [
+        { key: "backLabel", value: "All case studies" },
+        { key: "siteLabel", value: "Project site" },
+        { key: "repoLabel", value: "Repository" },
+        { key: "ogLabel", value: "Case study" },
+        { key: "ogFallbackTitle", value: "Engineering Case Study" },
+        { key: "ogFallbackKind", value: "Software Engineering" },
+        { key: "PRODUCTION", value: "Production" },
+        { key: "ACTIVE_DEVELOPMENT", value: "Active Development" },
+        { key: "RESEARCH", value: "Research" },
+        { key: "OPEN_SOURCE", value: "Open Source" },
+        { key: "ARCHIVED", value: "Archived" },
+      ] },
+      { key: "metrics", component: "PROJECT_METRICS", sortOrder: 95 },
+      { key: "narrative", component: "PROJECT_NARRATIVE", sortOrder: 90, items: [
+        { key: "problem", title: "What problem existed before the work", subtitle: "Problem" },
+        { key: "constraints", title: "What the system had to respect", subtitle: "Constraints" },
+        { key: "challenge", title: "Why the problem was difficult", subtitle: "Challenge" },
+        { key: "solution", title: "How I approached it", subtitle: "Approach" },
+        { key: "architecture", title: "How the system was shaped", subtitle: "Architecture" },
+        { key: "decisions", title: "Decisions and reasoning", subtitle: "Key decisions" },
+        { key: "tradeoffs", title: "What was deliberately accepted or rejected", subtitle: "Trade-offs" },
+        { key: "implementation", title: "How the design moved into production", subtitle: "Implementation" },
+        { key: "reliabilitySecurity", title: "How correctness and failure were handled", subtitle: "Reliability & security" },
+        { key: "impact", title: "What changed", subtitle: "Impact" },
+        { key: "lessonsLearned", title: "What the work reinforced", subtitle: "Lessons learned" },
+        { key: "whatDifferently", title: "How I would improve the next iteration", subtitle: "What I’d do differently" },
+      ] },
+      { key: "diagrams", component: "PROJECT_DIAGRAMS", eyebrow: "Architecture", title: "System diagrams", sortOrder: 80, items: [{ key: "defaultTitle", value: "Architecture diagram" }, { key: "renderingLabel", value: "Rendering diagram…" }] },
+      { key: "code", component: "PROJECT_CODE", eyebrow: "Code", title: "Sanitized implementation samples", description: "Representative patterns only. Private repositories, internal endpoints and employer-specific implementation details are intentionally omitted.", sortOrder: 70, items: [{ key: "copyLabel", value: "Copy" }, { key: "copiedLabel", value: "Copied" }] },
+      { key: "related", component: "RELATED_POSTS", eyebrow: "Related writing", title: "Engineering notes connected to this work", sortOrder: 60 },
+      { key: "note", component: "RICH_TEXT", body: "<p>Case studies involving employer or client systems intentionally describe architecture and outcomes at a high level. They do not expose confidential source code, credentials, internal endpoints or restricted operational details.</p>", sortOrder: 50 },
+    ],
+  },
+  {
+    slug: "blog", route: "/blog", title: "Technical Writing", seoTitle: "Technical Writing", seoDescription: "Notes on backend architecture, financial integrations, reliability, system design and applied AI.",
+    sections: [
+      { key: "hero", component: "PAGE_HERO", eyebrow: "Technical writing", title: "Writing about systems that have to work when the happy path ends.", description: "Notes on backend architecture, financial integrations, reliability, system design and applied AI.", sortOrder: 100, actions: [{ key: "rss", label: "RSS", href: "/feed.xml", variant: "OUTLINE" as const, external: false }] },
+      { key: "filters", component: "BLOG_FILTERS", sortOrder: 90, items: [
+        { key: "filteredBy", value: "Filtered by" }, { key: "categoryPrefix", value: "Category" }, { key: "tagPrefix", value: "Tag" }, { key: "clearLabel", value: "Clear filters" },
+      ] },
+      { key: "contentTypes", component: "SYSTEM_COPY", sortOrder: 85, items: [
+        { key: "ARTICLE", value: "Article" },
+        { key: "ENGINEERING_NOTE", value: "Engineering Note" },
+        { key: "ADR", value: "Architecture Decision" },
+        { key: "SYSTEM_DESIGN", value: "System Design" },
+        { key: "READING_NOTE", value: "Reading Note" },
+      ] },
+      { key: "posts", component: "POST_LIST", sortOrder: 80, items: [
+        { key: "readLabel", value: "Read article" }, { key: "minuteLabel", value: "min read" },
+      ] },
+      { key: "emptyFiltered", component: "EMPTY_STATE", title: "Nothing matches this filter yet.", description: "Try all technical writing instead. Categories and tags only appear once a published article uses them.", sortOrder: 70, actions: [
+        { key: "all", label: "Show all articles", href: "/blog", variant: "OUTLINE" as const, external: false },
+      ] },
+      { key: "empty", component: "EMPTY_STATE", title: "The first engineering notes are being prepared.", description: "This section will cover financial integrations, backend architecture, distributed systems, reliability and practical applied AI. I’d rather publish useful technical writing than fill the page with placeholder posts.", sortOrder: 60, actions: [
+        { key: "work", label: "Explore engineering work", href: "/#work", variant: "PRIMARY" as const, external: false },
+        { key: "experience", label: "View experience", href: "/#experience", variant: "OUTLINE" as const, external: false },
+      ] },
+      { key: "newsletter", component: "NEWSLETTER_SIGNUP", title: "Occasional engineering notes, without noise.", description: "Subscribe for new articles on backend systems, financial integrations and applied AI.", sortOrder: 50, items: [
+        { key: "emailPlaceholder", value: "you@example.com" }, { key: "emailAria", value: "Email address" }, { key: "submitLabel", value: "Subscribe" }, { key: "sendingLabel", value: "Sending…" }, { key: "privacyNote", value: "Double opt-in. Unsubscribe whenever you want. Your subscriber record stays in this application’s database." }, { key: "successTitle", value: "Subscription received" }, { key: "errorTitle", value: "Could not subscribe" }, { key: "invalidTitle", value: "Check your email address" }, { key: "invalidDescription", value: "Enter a valid email address before subscribing." }, { key: "emailError", value: "Enter a valid email address." }, { key: "localConfirmLabel", value: "Confirm subscription locally" },
+      ] },
+    ],
+  },
+  {
+    slug: "blog-detail", route: "/blog/[slug]", title: "Article", seoTitle: null, seoDescription: null,
+    sections: [
+      { key: "header", component: "POST_HEADER", sortOrder: 100, items: [
+        { key: "backLabel", value: "All writing" }, { key: "minuteLabel", value: "min read" }, { key: "seriesPrefix", value: "Part of" }, { key: "videoSuffix", value: "video" }, { key: "ogFallbackTitle", value: "Engineering Notes" }, { key: "ogFallbackCategory", value: "Technical Writing" },
+      ] },
+      { key: "content", component: "POST_BODY", sortOrder: 90, items: [{ key: "tocLabel", value: "On this page" }] },
+      { key: "relatedPosts", component: "RELATED_POSTS", title: "Related engineering notes", sortOrder: 80 },
+      { key: "relatedProjects", component: "RELATED_PROJECTS", title: "Related case studies", sortOrder: 70 },
+      { key: "newsletter", component: "NEWSLETTER_SIGNUP", title: "More engineering notes", sortOrder: 60, items: [
+        { key: "emailPlaceholder", value: "you@example.com" }, { key: "emailAria", value: "Email address" }, { key: "submitLabel", value: "Subscribe" }, { key: "sendingLabel", value: "Sending…" }, { key: "privacyNote", value: "Double opt-in. Unsubscribe whenever you want." }, { key: "successTitle", value: "Subscription received" }, { key: "errorTitle", value: "Could not subscribe" }, { key: "invalidTitle", value: "Check your email address" }, { key: "invalidDescription", value: "Enter a valid email address before subscribing." }, { key: "emailError", value: "Enter a valid email address." }, { key: "localConfirmLabel", value: "Confirm subscription locally" },
+      ] },
+    ],
+  },
+  {
+    slug: "series", route: "/series", title: "Series", seoTitle: "Engineering Series", seoDescription: "Technical series built around connected engineering problems.",
+    sections: [
+      { key: "hero", component: "PAGE_HERO", eyebrow: "Reading paths", title: "Technical series built around connected engineering problems.", description: "Follow a topic from first principles through architecture decisions, implementation trade-offs and production lessons.", sortOrder: 100 },
+      { key: "list", component: "SERIES_LIST", sortOrder: 90, items: [
+        { key: "exploreLabel", value: "Explore series" }, { key: "articleSingular", value: "article" }, { key: "articlePlural", value: "articles" }, { key: "emptyTitle", value: "Series are being prepared" }, { key: "emptyDescription", value: "Individual engineering notes are available in the blog while longer reading paths are being assembled." },
+      ], actions: [{ key: "blog", label: "Browse engineering writing", href: "/blog", variant: "LINK" as const, external: false }] },
+    ],
+  },
+  {
+    slug: "series-detail", route: "/series/[slug]", title: "Article Series", seoTitle: null, seoDescription: null,
+    sections: [
+      { key: "header", component: "SERIES_HEADER", eyebrow: "Article series", sortOrder: 100 },
+      { key: "contentTypes", component: "SYSTEM_COPY", sortOrder: 95, items: [
+        { key: "ARTICLE", value: "Article" },
+        { key: "ENGINEERING_NOTE", value: "Engineering Note" },
+        { key: "ADR", value: "Architecture Decision" },
+        { key: "SYSTEM_DESIGN", value: "System Design" },
+        { key: "READING_NOTE", value: "Reading Note" },
+      ] },
+      { key: "posts", component: "SERIES_POSTS", sortOrder: 90, items: [
+        { key: "minuteLabel", value: "min read" }, { key: "emptyLabel", value: "This series has no public articles yet." },
+      ] },
+    ],
+  },
+  {
+    slug: "ask", route: "/ask", title: "Ask about my work", seoTitle: "Ask about my engineering work", seoDescription: "Explore engineering work, experience and decisions with answers grounded in published portfolio evidence.",
+    sections: [
+      { key: "hero", component: "PAGE_HERO", eyebrow: "Ask AI", title: "Ask about my engineering work", description: "Explore my engineering work, experience and decisions with answers grounded in published portfolio evidence.", sortOrder: 100 },
+      { key: "chat", component: "ASK_CHAT", sortOrder: 90, items: [
+        { key: "newChat", value: "New chat" }, { key: "copyLink", value: "Copy chat link" }, { key: "copiedLink", value: "Link copied" }, { key: "loadFailed", value: "This conversation could not be loaded." }, { key: "sourcesSingular", value: "source" }, { key: "sourcesPlural", value: "sources" }, { key: "helpfulAria", value: "Helpful answer" }, { key: "unhelpfulAria", value: "Unhelpful answer" }, { key: "thinking", value: "Thinking…" }, { key: "questionAria", value: "Ask a question" }, { key: "placeholder", value: "Ask about my work…" }, { key: "sendAria", value: "Send question" }, { key: "unavailable", value: "The assistant is unavailable right now." }, { key: "requestFailed", value: "The assistant could not complete that request." },
+        { key: "rateLimited", value: "Question limit reached. Please try again later." }, { key: "invalidQuestion", value: "Ask a slightly more specific question." }, { key: "serverUnavailable", value: "The portfolio assistant is temporarily unavailable." },
+      ] },
+    ],
+  },
+  {
+    slug: "hire", route: "/hire", title: "Hire Leonard", seoTitle: "Hire Leonard Ekenekiso", seoDescription: "Backend engineering for reliable financial, integration-heavy and production systems.",
+    sections: [
+      { key: "hero", component: "PAGE_HERO", eyebrow: "Work with Leonard", title: "Backend engineering for systems where reliability, correctness and integration quality matter.", description: "I work primarily with Java and Spring Boot across financial systems, integrations and production backend services, with substantial PHP/Laravel experience from earlier roles.", sortOrder: 100 },
+      { key: "availability", component: "AVAILABILITY", sortOrder: 90, items: [{ key: "relocationPrefix", value: "Relocation" }] },
+      { key: "focus", component: "FOCUS_AREAS", title: "What I work on", sortOrder: 80, actions: [{ key: "work", label: "Read case studies", href: "/work", variant: "PRIMARY" as const, external: false }] },
+      { key: "skills", component: "SKILL_GROUPS", title: "Working stack", sortOrder: 70, actions: [{ key: "contact", label: "Contact me", href: "mailto:u.ekenekiso@ugbanawaji.com", variant: "SECONDARY" as const, external: true }] },
+      { key: "resumes", component: "RESUME_LIST", title: "Résumé variants", sortOrder: 60, items: [{ key: "openLabel", value: "Open résumé" }] },
+    ],
+  },
+  {
+    slug: "principles", route: "/principles", title: "Engineering Principles", seoTitle: "Engineering Principles", seoDescription: "Practical principles around failure handling, important state, useful boundaries and operability.",
+    sections: [{ key: "hero", component: "CONTENT_COLLECTION", eyebrow: "How I Engineer Systems", title: "Principles for backend systems that need to remain understandable when things go wrong.", description: "Practical principles around failure handling, important state, useful boundaries and operability.", sortOrder: 100, items: [{ key: "featuredLabel", value: "Featured" }, { key: "readLabel", value: "Read more" }, { key: "emptyTitle", value: "Nothing published here yet." }, { key: "emptyDescription", value: "Published entries will appear here when they are ready." }] }],
+  },
+  {
+    slug: "decisions", route: "/decisions", title: "Technical Decisions", seoTitle: "Technical Decisions & ADRs", seoDescription: "Architecture decisions, context, trade-offs and consequences.",
+    sections: [{ key: "hero", component: "CONTENT_COLLECTION", eyebrow: "Technical Decisions", title: "Technical decisions & ADRs", description: "Short records of architecture decisions, context, trade-offs and consequences.", sortOrder: 100, items: [{ key: "featuredLabel", value: "Featured" }, { key: "readLabel", value: "Read more" }, { key: "emptyTitle", value: "Nothing published here yet." }, { key: "emptyDescription", value: "Published entries will appear here when they are ready." }] }],
+  },
+  {
+    slug: "notes", route: "/notes", title: "Engineering Notes", seoTitle: "Engineering Notes", seoDescription: "Focused notes on backend architecture, distributed systems, fintech, Java and applied AI.",
+    sections: [{ key: "hero", component: "CONTENT_COLLECTION", eyebrow: "Engineering Notes", title: "System design & engineering notes", description: "Focused notes on backend architecture, distributed systems, fintech, Java and applied AI.", sortOrder: 100, items: [{ key: "featuredLabel", value: "Featured" }, { key: "readLabel", value: "Read more" }, { key: "emptyTitle", value: "Nothing published here yet." }, { key: "emptyDescription", value: "Published entries will appear here when they are ready." }] }],
+  },
+  {
+    slug: "open-source", route: "/open-source", title: "Open Source", seoTitle: "Open Source", seoDescription: "Public repositories, reference architectures and reusable engineering work.",
+    sections: [{ key: "hero", component: "CONTENT_COLLECTION", eyebrow: "Open Source", title: "Open source", description: "Public repositories, reference architectures and reusable engineering work.", sortOrder: 100, items: [{ key: "featuredLabel", value: "Featured" }, { key: "readLabel", value: "Read more" }, { key: "emptyTitle", value: "Nothing published here yet." }, { key: "emptyDescription", value: "Published entries will appear here when they are ready." }] }],
+  },
+  {
+    slug: "code", route: "/code", title: "Code Samples", seoTitle: "Code Samples", seoDescription: "Sanitized implementation samples and patterns.",
+    sections: [{ key: "hero", component: "CONTENT_COLLECTION", eyebrow: "Code Samples", title: "Code samples", description: "Sanitized code samples that illustrate implementation patterns without exposing private codebases.", sortOrder: 100, items: [{ key: "featuredLabel", value: "Featured" }, { key: "readLabel", value: "Read more" }, { key: "emptyTitle", value: "Nothing published here yet." }, { key: "emptyDescription", value: "Published entries will appear here when they are ready." }] }],
+  },
+  {
+    slug: "speaking", route: "/speaking", title: "Speaking & Teaching", seoTitle: "Speaking & Teaching", seoDescription: "Courses, workshops, talks and technical teaching.",
+    sections: [{ key: "hero", component: "CONTENT_COLLECTION", eyebrow: "Speaking & Teaching", title: "Speaking & teaching", description: "Courses, workshops, talks and technical teaching.", sortOrder: 100, items: [{ key: "featuredLabel", value: "Featured" }, { key: "readLabel", value: "Read more" }, { key: "emptyTitle", value: "Nothing published here yet." }, { key: "emptyDescription", value: "Published entries will appear here when they are ready." }] }],
+  },
+  {
+    slug: "recommendations", route: "/recommendations", title: "Recommendations", seoTitle: "Recommendations", seoDescription: "Tools, books and resources I have found useful enough to recommend.",
+    sections: [{ key: "hero", component: "CONTENT_COLLECTION", eyebrow: "Recommendations", title: "Recommendations", description: "Tools, books and resources I have found useful enough to recommend.", sortOrder: 100, items: [{ key: "featuredLabel", value: "Featured" }, { key: "readLabel", value: "Read more" }, { key: "emptyTitle", value: "Nothing published here yet." }, { key: "emptyDescription", value: "Published entries will appear here when they are ready." }] }],
+  },
+  {
+    slug: "changelog", route: "/changelog", title: "Changelog", seoTitle: "Site Changelog", seoDescription: "Meaningful changes to this portfolio and its supporting platform.",
+    sections: [{ key: "hero", component: "CONTENT_COLLECTION", eyebrow: "Changelog", title: "Site changelog", description: "Meaningful changes to this portfolio and its supporting platform.", sortOrder: 100, items: [{ key: "featuredLabel", value: "Featured" }, { key: "readLabel", value: "Read more" }, { key: "emptyTitle", value: "Nothing published here yet." }, { key: "emptyDescription", value: "Published entries will appear here when they are ready." }] }],
+  },
+  {
+    slug: "reading", route: "/reading", title: "Reading Notes", seoTitle: "Reading Notes", seoDescription: "Technical takeaways from books, RFCs, standards and papers.",
+    sections: [{ key: "hero", component: "CONTENT_COLLECTION", eyebrow: "Reading Notes", title: "Reading notes", description: "Technical takeaways from books, RFCs, standards and papers.", sortOrder: 100, items: [{ key: "featuredLabel", value: "Featured" }, { key: "readLabel", value: "Read more" }, { key: "emptyTitle", value: "Nothing published here yet." }, { key: "emptyDescription", value: "Published entries will appear here when they are ready." }] }],
+  },
+  {
+    slug: "uses", route: "/uses", title: "Uses", seoTitle: "Tools & Workflow", seoDescription: "Tools, environments and engineering workflow used to design, build and operate systems.",
+    sections: [
+      { key: "hero", component: "PAGE_HERO", eyebrow: "Uses", title: "Tools & workflow", description: "The tools, environments and engineering workflow I use to design, build and operate systems.", sortOrder: 100 },
+      { key: "content", component: "RICH_TEXT", body: "<h2>Backend</h2><p>Java, Spring Boot, JPA/Hibernate, PHP and Laravel are the main backend technologies in my working history. Java/Spring Boot is my current day-to-day stack.</p><h2>Data & messaging</h2><p>I work with MySQL, PostgreSQL and Redis, choosing persistence and caching patterns around the workload rather than treating the database as an implementation detail.</p><h2>Delivery</h2><p>Docker, AWS, Linux and CI/CD are part of how I build and operate services. I prefer repeatable deployments, useful logs and explicit production failure paths.</p><h2>Product delivery</h2><p>When I need to work across the product boundary, I use TypeScript, React and Next.js. For AI-backed Java systems I use LangChain4j and conventional backend boundaries around model integrations.</p>", sortOrder: 90 },
+    ],
+  },
+  {
+    slug: "now", route: "/now", title: "Now", seoTitle: "What I’m Working On Now", seoDescription: "A current snapshot of what I am building, learning and thinking about.",
+    sections: [
+      { key: "hero", component: "PAGE_HERO", eyebrow: "Now", title: "What I’m working on now", description: "A short, current snapshot of what I am building, learning and thinking about.", sortOrder: 100 },
+      { key: "content", component: "RICH_TEXT", body: "<p>My day-to-day backend work is currently centred on Java and Spring Boot, financial services, integrations and transaction-heavy systems.</p><p>I recently delivered the GlobalPath AI backend and I’m continuing to work with LangChain4j and agentic workflows from a backend-engineering perspective.</p><p>I’m also deepening my system-design practice through UML, object-oriented analysis and design, GRASP, and high-availability system design.</p>", sortOrder: 90 },
+    ],
+  },
+  {
+    slug: "privacy", route: "/privacy", title: "Privacy", seoTitle: "Privacy", seoDescription: "Privacy, analytics and newsletter consent information for ugbanawaji.com.",
+    sections: [
+      { key: "hero", component: "PAGE_HERO", eyebrow: "Privacy", title: "Privacy, analytics & newsletter consent", sortOrder: 100 },
+      { key: "content", component: "RICH_TEXT", body: "<p>This site uses first-party, privacy-conscious analytics to understand which pages and topics are useful. It does not intentionally store raw IP addresses or use cross-site advertising trackers.</p><h2>Newsletter</h2><p>Newsletter subscriptions use double opt-in. Your email address and consent state are stored by this application so requested engineering updates can be delivered. Every campaign includes an unsubscribe path.</p><h2>Contact messages</h2><p>Messages sent through the contact form are stored so I can respond and manage legitimate professional enquiries.</p><h2>AI assistant</h2><p>Questions sent to Ask Ugbanawaji may be stored with short-lived anonymous session identifiers to improve answers and identify gaps in the published portfolio. The assistant is grounded only in public portfolio content.</p><h2>Your choices</h2><p>You can unsubscribe from the newsletter at any time. For questions about stored contact or subscriber information, use the contact form.</p>", sortOrder: 90 },
+    ],
+  },
+  {
+    slug: "security", route: "/security", title: "Security", seoTitle: "Security", seoDescription: "Responsible disclosure guidance for ugbanawaji.com.",
+    sections: [
+      { key: "hero", component: "PAGE_HERO", eyebrow: "Security", title: "Responsible disclosure", sortOrder: 100 },
+      { key: "content", component: "RICH_TEXT", body: "<p>I value responsible security research. If you believe you have found a vulnerability in ugbanawaji.com, please report it privately rather than publishing exploitation details before there is an opportunity to investigate.</p><h2>What to include</h2><ul><li>A clear description of the issue and affected URL or feature.</li><li>Reproduction steps that avoid accessing other users’ data.</li><li>Impact and any relevant request/response details.</li></ul><h2>Please avoid</h2><ul><li>Destructive testing, denial-of-service activity or social engineering.</li><li>Accessing, changing or retaining data that is not yours.</li><li>Automated scanning that creates excessive traffic.</li></ul>", sortOrder: 90 },
+    ],
+  },
+  {
+    slug: "search", route: "/search", title: "Search", seoTitle: "Search Portfolio", seoDescription: "Search case studies, writing, decisions and engineering notes.",
+    sections: [
+      { key: "hero", component: "PAGE_HERO", eyebrow: "Search", title: "Search the engineering portfolio.", description: "Find case studies, articles, ADRs, engineering principles, open-source work and notes.", sortOrder: 100 },
+      { key: "sourceLabels", component: "SYSTEM_COPY", sortOrder: 95, items: [
+        { key: "PROFILE", value: "Profile" },
+        { key: "EXPERIENCE", value: "Experience" },
+        { key: "ARTICLE", value: "Article" },
+        { key: "ENGINEERING_NOTE", value: "Engineering Note" },
+        { key: "ADR", value: "Architecture Decision" },
+        { key: "SYSTEM_DESIGN", value: "System Design" },
+        { key: "READING_NOTE", value: "Reading Note" },
+        { key: "PRINCIPLE", value: "Engineering Principle" },
+        { key: "OPEN_SOURCE", value: "Open Source" },
+        { key: "CODE_SAMPLE", value: "Code Sample" },
+        { key: "SPEAKING", value: "Speaking" },
+        { key: "RECOMMENDATION", value: "Recommendation" },
+        { key: "CHANGELOG", value: "Changelog" },
+        { key: "USES", value: "Uses" },
+        { key: "NOW", value: "Now" },
+      ] },
+      { key: "search", component: "SEARCH", sortOrder: 90, items: [
+        { key: "placeholder", value: "Search Java, idempotency, core banking, AI…" }, { key: "aria", value: "Search portfolio" }, { key: "button", value: "Search" }, { key: "resultSingular", value: "result" }, { key: "resultPlural", value: "results" }, { key: "forLabel", value: "for" }, { key: "emptyTitle", value: "Nothing matched that search." }, { key: "emptyDescription", value: "Try a broader engineering term such as Java, fintech, reliability, architecture or AI." },
+      ] },
+    ],
+  },
+  {
+    slug: "newsletter-archive", route: "/newsletter/archive", title: "Newsletter Archive", seoTitle: "Newsletter Archive", seoDescription: "Selected engineering newsletter issues.",
+    sections: [
+      { key: "hero", component: "PAGE_HERO", eyebrow: "Newsletter archive", title: "Past engineering letters.", description: "Selected newsletter issues are preserved as indexable web pages.", sortOrder: 100 },
+      { key: "list", component: "NEWSLETTER_ARCHIVE", sortOrder: 90, items: [{ key: "emptyLabel", value: "No public newsletter issues yet." }] },
+    ],
+  },
+  {
+    slug: "newsletter-issue", route: "/newsletter/archive/[slug]", title: "Newsletter", seoTitle: null, seoDescription: null,
+    sections: [
+      { key: "header", component: "NEWSLETTER_ISSUE", eyebrow: "Engineering letter", sortOrder: 100, items: [{ key: "backLabel", value: "Newsletter archive" }] },
+      { key: "content", component: "NEWSLETTER_BODY", sortOrder: 90 },
+    ],
+  },
+  {
+    slug: "newsletter-confirmed", route: "/newsletter/confirmed", title: "Newsletter Confirmation", seoTitle: "Newsletter Confirmation", seoDescription: null,
+    sections: [{ key: "message", component: "STATUS_MESSAGE", sortOrder: 100, items: [
+      { key: "successTitle", value: "Subscription confirmed" }, { key: "errorTitle", value: "Confirmation link unavailable" }, { key: "successBody", value: "You’re confirmed. New engineering notes will be sent when they are published." }, { key: "expiredBody", value: "That confirmation link has expired. Subscribe again to receive a new one." }, { key: "errorBody", value: "The confirmation link is invalid or incomplete." }, { key: "homeLabel", value: "Back to technical writing" }, { key: "homeHref", value: "/blog" },
+    ] }],
+  },
+  {
+    slug: "newsletter-unsubscribe", route: "/newsletter/unsubscribe", title: "Newsletter Preferences", seoTitle: "Newsletter Preferences", seoDescription: null,
+    sections: [{ key: "message", component: "NEWSLETTER_UNSUBSCRIBE", title: "Newsletter preferences", sortOrder: 100, items: [
+      { key: "promptBody", value: "Confirm that you want to stop receiving {siteName} engineering newsletters." }, { key: "doneBody", value: "You have been unsubscribed." }, { key: "homeLabel", value: "Return home" }, { key: "homeHref", value: "/" }, { key: "submitLabel", value: "Unsubscribe" },
+    ] }],
+  },
+  {
+    slug: "offline", route: "/offline", title: "Offline", seoTitle: "Offline", seoDescription: null,
+    sections: [{ key: "message", component: "STATUS_MESSAGE", title: "You’re offline.", description: "Previously visited pages may still be available from the local cache. Reconnect to load fresh portfolio content.", sortOrder: 100, actions: [{ key: "home", label: "Go home", href: "/", variant: "PRIMARY" as const, external: false }] }],
+  },
+  {
+    slug: "newsletter-campaign", route: "/newsletter/campaigns/[id]", title: "Newsletter", seoTitle: "Newsletter", seoDescription: null,
+    sections: [
+      { key: "header", component: "NEWSLETTER_ISSUE", eyebrow: "{siteName} newsletter", sortOrder: 100 },
+      { key: "content", component: "NEWSLETTER_BODY", sortOrder: 90 },
+      { key: "actions", component: "PAGE_ACTIONS", sortOrder: 80, actions: [{ key: "blog", label: "Read more engineering notes", href: "/blog", variant: "OUTLINE" as const, external: false }] },
+    ],
+  },
+  {
+    slug: "not-found", route: "/404", title: "Not Found", seoTitle: "Page Not Found", seoDescription: null,
+    sections: [{ key: "message", component: "STATUS_MESSAGE", eyebrow: "404", title: "That page isn’t here.", description: "The URL may have changed, or the content may not be public. Search the engineering portfolio or return home.", sortOrder: 100, actions: [{ key: "search", label: "Search site", href: "/search", variant: "PRIMARY" as const, external: false }, { key: "home", label: "Go home", href: "/", variant: "OUTLINE" as const, external: false }] }],
+  },
+  {
+    slug: "error", route: "/__error", title: "Error", seoTitle: "Unexpected Error", seoDescription: null,
+    sections: [{ key: "message", component: "STATUS_MESSAGE", eyebrow: "Something went wrong", title: "This part of the site hit an unexpected error.", description: "The error has been contained. You can retry without losing the rest of the site.", sortOrder: 100, items: [{ key: "retryLabel", value: "Try again" }] }],
+  },
+  {
+    slug: "global-error", route: "/__global-error", title: "Unexpected Error", seoTitle: "Unexpected Error", seoDescription: null,
+    sections: [{ key: "message", component: "STATUS_MESSAGE", eyebrow: "Unexpected error", title: "The site could not complete that request.", description: "Retry once. If the problem persists, return to the homepage and try again later.", sortOrder: 100, items: [{ key: "retryLabel", value: "Try again" }] }],
+  },
+  {
+    slug: "preview-post", route: "/preview/post/[token]", title: "Article Preview", seoTitle: "Article Preview", seoDescription: null,
+    sections: [
+      { key: "message", component: "STATUS_MESSAGE", title: "Private preview.", description: "This article is not public yet. The link expires automatically.", sortOrder: 120, actions: [{ key: "back", label: "Back to site", href: "/", variant: "LINK" as const, external: false }] },
+      { key: "header", component: "POST_HEADER", sortOrder: 110 },
+      { key: "content", component: "POST_BODY", sortOrder: 100 },
+    ],
+  },
+  {
+    slug: "preview-project", route: "/preview/project/[token]", title: "Project Preview", seoTitle: "Project Preview", seoDescription: null,
+    sections: [
+      { key: "message", component: "STATUS_MESSAGE", title: "Private preview.", description: "This case study is not public yet. The preview link expires automatically.", sortOrder: 120 },
+      { key: "header", component: "PROJECT_HEADER", sortOrder: 110, items: [
+        { key: "PRODUCTION", value: "Production" },
+        { key: "ACTIVE_DEVELOPMENT", value: "Active Development" },
+        { key: "RESEARCH", value: "Research" },
+        { key: "OPEN_SOURCE", value: "Open Source" },
+        { key: "ARCHIVED", value: "Archived" },
+      ] },
+      { key: "narrative", component: "PROJECT_NARRATIVE", sortOrder: 100, items: [
+        { key: "problem", title: "Problem" }, { key: "constraints", title: "Constraints" }, { key: "challenge", title: "Challenge" }, { key: "solution", title: "Approach" },
+        { key: "architecture", title: "Architecture" }, { key: "decisions", title: "Decisions" }, { key: "tradeoffs", title: "Trade-offs" }, { key: "implementation", title: "Implementation" },
+        { key: "reliabilitySecurity", title: "Reliability & security" }, { key: "impact", title: "Impact" }, { key: "lessonsLearned", title: "Lessons" }, { key: "whatDifferently", title: "What I’d do differently" },
+      ] },
+      { key: "diagrams", component: "PROJECT_DIAGRAMS", sortOrder: 90, items: [{ key: "defaultTitle", value: "Architecture diagram" }, { key: "renderingLabel", value: "Rendering diagram…" }] },
+      { key: "code", component: "PROJECT_CODE", sortOrder: 80, items: [{ key: "copyLabel", value: "Copy" }, { key: "copiedLabel", value: "Copied" }] },
+    ],
+  },
+  {
+    slug: "library-detail", route: "/library/[type]/[slug]", title: "Knowledge Entry", seoTitle: null, seoDescription: null,
+    sections: [
+      { key: "header", component: "LIBRARY_ENTRY", sortOrder: 100, items: [
+        { key: "backLabel", value: "Back" },
+        { key: "PRINCIPLE", title: "Principle", href: "/principles" },
+        { key: "ADR", title: "Architecture Decision", href: "/decisions" },
+        { key: "ENGINEERING_NOTE", title: "Engineering Note", href: "/notes" },
+        { key: "OPEN_SOURCE", title: "Open Source", href: "/open-source" },
+        { key: "CODE_SAMPLE", title: "Code Sample", href: "/code" },
+        { key: "SPEAKING", title: "Speaking & Teaching", href: "/speaking" },
+        { key: "RECOMMENDATION", title: "Recommendation", href: "/recommendations" },
+        { key: "CHANGELOG", title: "Changelog", href: "/changelog" },
+        { key: "USES", title: "Uses", href: "/uses" },
+        { key: "NOW", title: "Now", href: "/now" },
+        { key: "READING_NOTE", title: "Reading Note", href: "/reading" },
+      ] },
+      { key: "content", component: "LIBRARY_BODY", sortOrder: 90 },
+    ],
+  },
+] as const;
+
+export const seededPrinciples = [
+  { title: "Make failure explicit", slug: "make-failure-explicit", summary: "External services fail, requests get repeated and background jobs stop midway. Account for those cases as part of the design.", content: "<p>External services fail, requests get repeated and background jobs stop midway. I prefer to account for those cases as part of the design instead of adding fixes after production incidents.</p>", sortOrder: 100 },
+  { title: "Protect important state", slug: "protect-important-state", summary: "Transactional and business-critical data needs clear ownership, validation and predictable state changes.", content: "<p>Transactional and business-critical data needs clear ownership, validation and predictable state changes. The invariants that matter should be visible in code and tests.</p>", sortOrder: 90 },
+  { title: "Keep boundaries useful", slug: "keep-boundaries-useful", summary: "Use architectural boundaries when they make a system easier to understand, test and change.", content: "<p>I use architectural boundaries when they make a system easier to understand, test and change, not simply because a pattern exists.</p>", sortOrder: 80 },
+  { title: "Leave systems operable", slug: "leave-systems-operable", summary: "Logs, metrics, audit trails and traceable workflows are part of building the system, not an afterthought.", content: "<p>Logs, metrics, audit trails and traceable workflows are part of building the system. Production software should leave enough evidence to understand what happened and recover safely.</p>", sortOrder: 70 },
+] as const;
+
+export const seededExperiences = [
+  {
+    company: "Airvend",
+    role: "Backend Engineer",
+    location: "Lagos, Nigeria",
+    startDate: "Nov 2025",
+    endDate: null,
+    current: true,
+    summary: "Build and maintain production backend services with Java and Spring Boot for consumer and merchant-facing financial and value-added-service products.",
+    highlights: [
+      "Build and extend Java/Spring Boot services and REST APIs used by production applications.",
+      "Work on transaction-oriented business workflows and integrations with internal and external service providers.",
+      "Use JPA/Hibernate and relational databases across persistent business workflows.",
+      "Investigate production issues and improve validation, error handling, security and service reliability.",
+    ],
+    impactAreas: ["Java / Spring Boot", "Financial Systems", "Integrations", "Production Reliability"],
+    sortOrder: 120,
+  },
+  {
+    company: "Boctrust Microfinance Bank",
+    role: "Software Engineering Team Lead",
+    location: "Lagos, Nigeria",
+    startDate: "Apr 2024",
+    endDate: "Nov 2025",
+    current: false,
+    summary: "Worked across software engineering, banking integrations and production technology operations in a regulated financial environment.",
+    highlights: [
+      "Worked on integrations involving BankOne, NIBSS NDD, NIP, EasyPay and BVN consent flows.",
+      "Contributed to transaction workflows, API integrations and operational support for lending and payment services.",
+      "Investigated production issues across application, database, infrastructure and third-party integration layers.",
+      "Helped secure a ₦15M eTranzact waiver through technical and vendor coordination.",
+    ],
+    impactAreas: ["Financial Systems", "Banking Integrations", "Backend Engineering", "Production Operations"],
+    sortOrder: 110,
+  },
+  {
+    company: "Scnip Technology",
+    role: "Backend Developer",
+    location: "Abuja, Nigeria",
+    startDate: "Jul 2023",
+    endDate: "Apr 2024",
+    current: false,
+    summary: "Worked full-time on Java/Spring Boot backend systems, building APIs, business logic and integrations for production applications.",
+    highlights: [
+      "Built and maintained backend services using Java and Spring Boot.",
+      "Designed REST APIs and persistence workflows with JPA/Hibernate and relational databases.",
+      "Integrated backend services with external platforms and third-party APIs.",
+      "Contributed to validation, authentication, testing and backend maintainability.",
+    ],
+    impactAreas: ["Java / Spring Boot", "Backend Engineering", "Integrations", "Testing"],
+    sortOrder: 100,
+  },
+  {
+    company: "Harde Business School",
+    role: "Software Engineering Team Lead",
+    location: "Lagos, Nigeria",
+    startDate: "Jan 2023",
+    endDate: "Mar 2024",
+    current: false,
+    summary: "Led development and maintenance of an existing education platform, working primarily within a legacy PHP/Laravel codebase while delivering new features and keeping the system stable.",
+    highlights: [
+      "Maintained and extended a legacy PHP/Laravel application used for learning and business operations.",
+      "Delivered backend features, APIs and database changes while working through existing technical debt incrementally.",
+      "Coordinated technical work across the development team, including implementation decisions and code reviews.",
+    ],
+    impactAreas: ["PHP / Laravel", "Legacy Systems", "Engineering Leadership"],
+    sortOrder: 90,
+  },
+  {
+    company: "Harde Business School",
+    role: "Full Stack Developer",
+    location: "Lagos, Nigeria",
+    startDate: "Jul 2022",
+    endDate: "Jan 2023",
+    current: false,
+    summary: "Built and extended application features across the PHP/Laravel backend and web interfaces for internal business and learning workflows.",
+    highlights: [
+      "Built backend functionality for authentication, reporting, staff portals and internal workflows.",
+      "Designed APIs and database-backed features using PHP, Laravel and MySQL.",
+      "Supported deployments, maintenance and production issue resolution.",
+    ],
+    impactAreas: ["PHP / Laravel", "Full Stack Delivery", "Business Systems"],
+    sortOrder: 80,
+  },
+  {
+    company: "Pensuh Innovation",
+    role: "Contract Full Stack Developer",
+    location: "Anambra, Nigeria",
+    startDate: "Oct 2018",
+    endDate: "Dec 2024",
+    current: false,
+    summary: "Built and maintained a multi-tenant school operations platform spanning enrolment, attendance, academic records, assessments and tuition payments.",
+    highlights: [
+      "Built reusable PHP/Laravel modules and multi-tenant application workflows.",
+      "Worked with MySQL on relational data modelling and application persistence.",
+      "Integrated online payments and cloud-backed storage for institutional workflows.",
+    ],
+    impactAreas: ["PHP / Laravel", "Multi-tenancy", "Payments", "SaaS"],
+    sortOrder: 70,
+  },
+] as const;
+
+export const seededProjects = [
+  {
+    title: "GlobalPath",
+    slug: "globalpath-ai-backend",
+    kind: "Delivered AI Backend · Java / Spring Boot",
+    lifecycleStatus: "PRODUCTION" as const,
+    summary: "A delivered AI-backed global mobility backend built with Java and Spring Boot. The backend is live while the product UI continues to be developed.",
+    problem: "Global mobility decisions involve large amounts of changing information, user context and structured business rules. The backend needed to support AI-assisted workflows without turning the model into the application architecture.",
+    constraints: "The service needed conventional API boundaries, persistent application state, explicit business logic and a deployable production backend while the frontend evolved independently.",
+    challenge: "AI features need to coexist with deterministic application behavior, validation, persistence and operational concerns rather than bypassing them.",
+    solution: "Built the backend as a Java/Spring Boot application with LangChain4j integrated inside normal application services and API workflows.",
+    architecture: "Spring Boot application services own business workflows and persistence. AI interactions are integrated through explicit service boundaries so model-backed behavior remains part of a conventional backend architecture.",
+    decisions: "Keep AI orchestration behind application boundaries, keep domain and persistence concerns independent of the model provider, and expose the product through stable REST contracts for the separate UI.",
+    tradeoffs: "The architecture adds more structure than a direct LLM wrapper, but makes the backend easier to test, change and operate as the product grows.",
+    implementation: "Implemented the backend in Java/Spring Boot with LangChain4j-backed workflows and deployed the service independently of the frontend.",
+    reliabilitySecurity: "Validation, application boundaries and persisted state are handled as normal backend concerns rather than delegated to model output.",
+    impact: "Backend delivery was completed and deployed while frontend implementation continued independently.",
+    lessonsLearned: "AI features are easier to evolve when they are treated as one capability inside a well-structured backend rather than the centre of every application concern.",
+    whatDifferently: null,
+    confidentialityNote: null,
+    diagrams: null,
+    codeSamples: null,
+    techStack: ["Java", "Spring Boot", "LangChain4j", "REST APIs", "Railway"],
+    metrics: [],
+    featured: true,
+    status: "PUBLISHED" as const,
+    externalUrl: "https://global-path-ai-production.up.railway.app/",
+    repoUrl: null,
+    sortOrder: 120,
+  },
+  {
+    title: "Credense",
+    slug: "credense-credit-risk-platform",
+    kind: "Credit & Risk Platform · PHP / Laravel",
+    lifecycleStatus: "ACTIVE_DEVELOPMENT" as const,
+    summary: "A multi-tenant credit and risk platform that brings together credit-bureau data, borrower information, loan history and configurable lending rules into a structured decision workflow.",
+    problem: "Credit assessment often depends on fragmented bureau responses, borrower records and manual interpretation. The product needs to normalize that evidence into a consistent workflow without hiding the underlying source data.",
+    constraints: "Multiple credit bureaus expose different data shapes. The platform must preserve tenant boundaries, normalize creditor and loan information, and keep lending rules configurable rather than hard-coded into one institution’s process.",
+    challenge: "The difficult part is turning inconsistent external credit data into comparable borrower and loan history while keeping risk decisions explainable and reviewable.",
+    solution: "Built a multi-tenant Laravel platform with bureau integrations, normalized credit reports, loan history, repayment schedules and configurable risk rules including DTI, score thresholds and blacklist checks.",
+    architecture: "Laravel 12 application with tenant-aware workflows, normalized credit-domain entities and an Inertia/React frontend. Bureau integrations feed normalized reports and rules operate on persisted domain data.",
+    decisions: "Normalize creditors and loan history before applying risk rules, preserve source evidence, and keep risk profiles configurable across Conservative, Moderate and Aggressive policies.",
+    tradeoffs: "Normalization adds processing and mapping work, but prevents each bureau’s response format from leaking throughout the application.",
+    implementation: "Implemented bureau connectors, credit report/score models, creditor matching, loan history, repayment schedules, tenant onboarding and risk evaluation workflows.",
+    reliabilitySecurity: "Tenant boundaries and controlled integration workflows keep one institution’s data and decisions separate from another’s.",
+    impact: "The platform provides a consistent foundation for credit assessment across multiple bureau sources and configurable lending policies.",
+    lessonsLearned: "External data becomes much more useful when its semantics are normalized before downstream rules depend on it.",
+    whatDifferently: null,
+    confidentialityNote: "The main repository is private; this case study describes non-confidential product and architecture context.",
+    diagrams: null,
+    codeSamples: null,
+    techStack: ["PHP", "Laravel 12", "MySQL", "React", "TypeScript", "Inertia.js", "Zod"],
+    metrics: [],
+    featured: true,
+    status: "PUBLISHED" as const,
+    externalUrl: null,
+    repoUrl: null,
+    sortOrder: 110,
+  },
+  {
+    title: "AI Learn",
+    slug: "ai-learn-durable-conversations",
+    kind: "Reference Architecture · Java / Applied AI",
+    lifecycleStatus: "OPEN_SOURCE" as const,
+    summary: "A Java/Spring Boot reference application that treats AI conversations as durable backend workflows instead of transient model calls.",
+    problem: "A basic LLM request/response flow does not handle reconnects, long-running execution, cancellation, replay or multi-node delivery well.",
+    constraints: "Conversation state and execution state must survive process boundaries, events need bounded replay, and delivery must work across more than one application node.",
+    challenge: "The system needs to combine persistent application state with live streaming without making the transport layer the source of truth.",
+    solution: "Persist conversations and runs in MySQL, use a transactional outbox, Redis Streams for bounded replay, Redis Pub/Sub for live multi-node fanout, and expose WebSocket/SSE delivery paths.",
+    architecture: "MySQL is authoritative for conversations, messages and runs. Outbox events bridge committed state to Redis. Streams provide replay and Pub/Sub handles low-latency live delivery.",
+    decisions: "Keep the database authoritative, give runs and events stable identifiers, and design reconnect/cancellation semantics explicitly rather than assuming a permanent client connection.",
+    tradeoffs: "The additional persistence and event plumbing is heavier than a simple streaming endpoint, but it makes execution behavior explicit and recoverable.",
+    implementation: "Implemented with Java 25, Spring Boot 4.1, JPA/Hibernate, LangChain4j, MySQL, Redis, WebSockets, SSE, Flyway and automated tests.",
+    reliabilitySecurity: "Idempotency keys, reply/run identifiers, replay cursors and explicit cancellation make duplicate and disconnected operations easier to reason about.",
+    impact: "Provides public evidence of Java backend architecture around durable, streaming AI workflows.",
+    lessonsLearned: "Durability and live streaming are separate concerns; keeping authoritative state independent from delivery makes the system easier to recover.",
+    whatDifferently: null,
+    confidentialityNote: null,
+    diagrams: null,
+    codeSamples: null,
+    techStack: ["Java 25", "Spring Boot", "LangChain4j", "JPA/Hibernate", "MySQL", "Redis", "WebSocket", "SSE"],
+    metrics: [],
+    featured: true,
+    status: "PUBLISHED" as const,
+    externalUrl: null,
+    repoUrl: "https://github.com/Tetranyble/ai-learn",
+    sortOrder: 100,
+  },
+  {
+    title: "Ugbanawaji",
+    slug: "ugbanawaji-portfolio-platform",
+    kind: "Portfolio & Publishing Platform · Full Stack",
+    lifecycleStatus: "PRODUCTION" as const,
+    summary: "The application behind this portfolio, with a private CMS, publishing workflows, media management, newsletters, analytics, search and AI-assisted interaction with published content.",
+    problem: "A static portfolio made it difficult to publish technical work, maintain case studies, manage media and keep public evidence current without editing source code.",
+    constraints: "The public site and private editorial tooling need to live in one product while preserving secure admin boundaries, scheduled publishing and reliable data ownership.",
+    challenge: "The platform needs to support both a polished public portfolio and a practical editorial back office without turning every content update into a deployment.",
+    solution: "Built a Next.js application with MySQL/Drizzle, Better Auth, private CMS workflows, newsletter tooling, analytics and an evidence-grounded portfolio assistant.",
+    architecture: "Next.js serves the public site and authenticated admin workspace. MySQL stores content and editorial state; background jobs handle scheduled work and AI indexing.",
+    decisions: "Keep public portfolio content in the database, make the CMS the source of truth, and ground AI answers only in published portfolio evidence.",
+    tradeoffs: "Owning the CMS increases implementation scope compared with using a hosted CMS, but keeps editorial workflows, portfolio data and AI indexing under one application model.",
+    implementation: "Implemented content authoring, revisions, scheduled publishing, media providers, newsletter workflows, search, analytics, contact management and AI indexing.",
+    reliabilitySecurity: "Authentication, admin-only mutations, validation, audit logs and explicit published/draft states separate public content from editorial operations.",
+    impact: "Provides one editable platform for portfolio content, technical writing and supporting engineering evidence.",
+    lessonsLearned: "A portfolio becomes more useful when publishing and maintenance are treated as product workflows rather than static-page chores.",
+    whatDifferently: null,
+    confidentialityNote: null,
+    diagrams: null,
+    codeSamples: null,
+    techStack: ["Next.js", "React", "TypeScript", "MySQL", "Drizzle", "Better Auth"],
+    metrics: [],
+    featured: true,
+    status: "PUBLISHED" as const,
+    externalUrl: "https://ugbanawaji.com",
+    repoUrl: "https://github.com/Tetranyble/ugbanawaji",
+    sortOrder: 90,
+  },
+] as const;
+
+export const seededStarterPosts = [
+  {
+    title: "Designing Financial Integrations That Fail Safely",
+    slug: "designing-financial-integrations-that-fail-safely",
+    excerpt: "Retries, idempotency, reconciliation and explicit failure states when an external financial service becomes part of a transaction path.",
+    categories: ["Backend Engineering"],
+    tags: ["Fintech", "Reliability", "Integrations", "Idempotency"],
+    content: `# Designing Financial Integrations That Fail Safely\n\nA successful API call is not the same thing as a successful financial transaction. Once a system depends on a core-banking provider, payment processor or another external financial service, ambiguity becomes part of the domain.\n\n## Make states explicit\n\nA timeout means the caller stopped waiting. It does not prove the provider did nothing. Persist the transaction intent, keep stable identifiers, and represent unknown or pending states explicitly.\n\n## Make retries safe\n\nIdempotency has to be enforced by durable state and business invariants, not only by a request header.\n\n## Reconcile deliberately\n\nStore enough evidence to compare internal state with provider state and make correction workflows repeatable and auditable.\n`,
+  },
+  {
+    title: "Durable AI Workflows Need Backend Discipline",
+    slug: "durable-ai-workflows-need-backend-discipline",
+    excerpt: "Why persistent state, explicit execution, retries and observability still matter when a backend starts using LLMs.",
+    categories: ["Applied AI"],
+    tags: ["Java", "Spring Boot", "LangChain4j", "AI"],
+    content: `# Durable AI Workflows Need Backend Discipline\n\nAdding an LLM does not remove the need for ordinary backend engineering. Long-running AI work still needs persistent state, stable identifiers, cancellation, retry semantics and enough observability to understand what happened.\n\nI prefer to keep model-backed behavior behind application boundaries so the rest of the system can remain deterministic where it needs to be.\n`,
+  },
+];
+
+export const seededAvailability = {
+  id: "main",
+  visible: true,
+  status: "Open to backend engineering opportunities",
+  relocation: "Open to international relocation",
+  note: "Java/Spring Boot is my current primary stack; I also bring substantial PHP/Laravel experience.",
+  targetRoles: [
+    "Backend Software Engineer",
+    "Java / Spring Boot Engineer",
+    "PHP / Laravel Engineer",
+  ],
+  workModes: [
+    "Remote",
+    "Relocation",
+    "Visa sponsorship",
+  ],
+} as const;
+
+export const seededResumeVariants = [
+  {
+    name: "Java / Spring Boot Backend Resume",
+    slug: "java-spring-boot-backend",
+    targetRole: "Backend Software Engineer — Java / Spring Boot",
+    summary: "Java/Spring Boot focused resume for backend, platform and financial-systems roles.",
+    fileUrl: "/Leonard-Ekenekiso-Java-Spring-Boot-Resume.pdf",
+    isDefault: true,
+    status: "PUBLISHED" as const,
+    sortOrder: 100,
+  },
+  {
+    name: "PHP / Laravel Backend Resume",
+    slug: "php-laravel-backend",
+    targetRole: "Backend Software Engineer — PHP / Laravel",
+    summary: "PHP/Laravel focused resume for backend, SaaS, payments and integration-heavy roles.",
+    fileUrl: "/Leonard-Ekenekiso-PHP-Laravel-Resume.pdf",
+    isDefault: false,
+    status: "PUBLISHED" as const,
+    sortOrder: 90,
+  },
+] as const;

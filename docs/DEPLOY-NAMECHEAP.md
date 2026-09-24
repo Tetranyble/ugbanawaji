@@ -83,7 +83,25 @@ DB_SSL=false
 DB_POOL_LIMIT=5
 FILESYSTEM_DISK=local
 LOCAL_STORAGE_ROOT=/home/unitxcqu/ugbanawaji-storage/media
+MAIL_MAILER=smtp
+MAIL_HOST=smtp.zoho.com
+MAIL_PORT=465
+MAIL_SCHEME=ssl
+MAIL_USERNAME=your_zoho_email_address
+MAIL_PASSWORD=your_zoho_app_password
+MAIL_FROM_ADDRESS=u.ekenekiso@ugbanawaji.com
+MAIL_FROM_NAME="Ekenekiso Ugbanawaji"
+MAIL_TO_ADDRESS=u.ekenekiso@ugbanawaji.com
+NEWSLETTER_MAILER=log
+NEXT_PUBLIC_MIXPANEL_TOKEN=your_project_token
+MIXPANEL_PROJECT_ID=your_project_id
+MIXPANEL_REGION=eu
+MIXPANEL_SERVICE_ACCOUNT_USERNAME=your_service_account_username
+MIXPANEL_SERVICE_ACCOUNT_SECRET=your_service_account_secret
+MIXPANEL_SYNC_BACKFILL_DAYS=30
 ```
+
+Mail uses standard SMTP and is not tied to Zoho. For Zoho Mail, use the mailbox address and an application-specific password when two-factor authentication is enabled. You can later change the host, port, scheme and credentials to any other SMTP provider without changing application code. Newsletter campaigns remain in log mode until their separate `NEWSLETTER_MAIL_*` SMTP credentials are configured.
 
 Use the real cPanel-prefixed database/user names and private secrets. Generate separate secrets with:
 
@@ -120,7 +138,37 @@ NODE_ENV=production npm run db:seed
 
 Run the seed on the first deployment. Run it again only when you want to update its idempotent starter records. Restart the application from **Setup Node.js App** after migration.
 
-## 7. Verify the release
+## 7. Schedule the analytics sync
+
+The browser sends events to Mixpanel, while a server-only job imports a privacy-reduced copy into the `mixpanel_events` MySQL table. The admin analytics page reads that local table, so normal reporting does not require opening Mixpanel.
+
+After the migration has created the table and the application has been restarted, run the first import through the protected application endpoint. This uses the already-running standalone application and requires no root `node_modules` installation:
+
+```bash
+cd /home/unitxcqu/ugbanawaji
+set -a
+source .env.production
+set +a
+curl --fail --silent --show-error --max-time 180 --request POST --header "Authorization: Bearer ${SCHEDULER_CRON_SECRET}" https://ugbanawaji.com/api/cron/analytics
+```
+
+Add these cPanel **Cron Jobs**. They call protected routes in the running application, so they do not need Node activation or `npm install` on the server.
+
+Every minute, process newsletters, AI indexing and scheduled content work:
+
+```bash
+/bin/bash -lc 'cd /home/unitxcqu/ugbanawaji && set -a && source .env.production && set +a && curl --fail --silent --show-error --max-time 55 --request POST --header "Authorization: Bearer ${SCHEDULER_CRON_SECRET}" https://ugbanawaji.com/api/cron/scheduler >> /home/unitxcqu/ugbanawaji-scheduler.log 2>&1'
+```
+
+At 17 minutes past each hour, import Mixpanel analytics:
+
+```bash
+/bin/bash -lc 'cd /home/unitxcqu/ugbanawaji && set -a && source .env.production && set +a && curl --fail --silent --show-error --max-time 180 --request POST --header "Authorization: Bearer ${SCHEDULER_CRON_SECRET}" https://ugbanawaji.com/api/cron/analytics >> /home/unitxcqu/ugbanawaji-analytics.log 2>&1'
+```
+
+Use schedules `* * * * *` and `17 * * * *`, respectively. Do not place secrets directly in the cron commands; both commands load them from `.env.production`, which should have file permissions `600`. Rotate a disclosed service-account secret in Mixpanel, update `.env.production`, and restart the application before the next sync.
+
+## 8. Verify the release
 
 Check these URLs:
 
@@ -131,5 +179,7 @@ https://ugbanawaji.com/admin/login
 ```
 
 Sign in with `ADMIN_EMAIL` and `ADMIN_PASSWORD`, upload a small image, create a draft post, and confirm the stored image URL begins with `https://ugbanawaji.com/`.
+
+Also open `/admin/analytics` after the first analytics sync. It should say that traffic is synced from Mixpanel and show the last sync time. Until imported page views exist, it deliberately falls back to the application's first-party counters.
 
 For later releases: make a database and media backup, upload/extract the new archive over the app directory, run migrations when the archive contains new migrations, and restart the app. The bundled runtime does not require `npm install`. Never delete `LOCAL_STORAGE_ROOT` during deployment.

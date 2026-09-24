@@ -2,14 +2,19 @@
 
 Use this checklist for every `ugbanawaji.com` release. A release is ready only after all required checks have passed for that build.
 
-## Authentication migration status
+## Schema strategy
 
-The application uses Better Auth email/password credentials with public signup disabled. Existing CMS user IDs remain unchanged. The migration chain is:
+The portfolio content model is intentionally a clean rebuild. Backward compatibility with the previous content schema is not preserved. For local/recreated databases use `npm run db:reset`. For production, create and review a fresh migration baseline from the current `src/db/schema.ts`; do not replay the retired historical content schema.
 
-- `drizzle/0000_release_baseline.sql` — the original application baseline.
-- `drizzle/0001_better_auth.sql` — adds Better Auth session/account/verification storage, backfills each existing `users.password_hash` into a credential account using the same user ID, marks existing users as email-verified, and only then removes the legacy password column.
+## Public content gate
 
-Before production deployment, rehearse the complete migration chain against an isolated copy of the production database and verify that the administrator can sign in with the existing password after migration. Back up the production database immediately before the cutover.
+Run:
+
+```bash
+npm run content:audit
+```
+
+This fails when public components introduce raw hard-coded visitor copy, literal public accessibility/form labels, hard-coded search-result labels or invented image-alt fallback text. Public content should be edited through database-backed records and seeded from `src/db/seed-content.ts`.
 
 ## Dependency gate
 
@@ -34,6 +39,7 @@ A failed or unavailable audit is not equivalent to a clean audit.
 Run:
 
 ```bash
+npm run content:audit
 npm run typecheck
 npm run lint
 npm run build
@@ -60,22 +66,21 @@ Warnings are emitted for review-required choices such as a private non-TLS datab
 
 ## Database validation
 
-For a fresh database or an upgrade rehearsal:
+For a recreated development database:
 
 ```bash
-npm run db:migrate
-npm run db:seed
+npm run db:reset
 ```
 
-For an existing production database, back it up first and apply only unapplied migrations. Use `db:generate` plus reviewed migration SQL for future schema changes. Do not use `db:push` against production.
+This runs the current schema push, truncation and canonical content seed. For production, back up first and deploy a reviewed fresh migration baseline generated from the current schema. Do not use `db:push` against production.
 
-Migration verification must include:
+Database verification should include:
 
-1. The existing user ID is unchanged.
-2. A credential row exists with `provider_id = 'credential'`, `issuer = 'local:credential'` and `account_id` equal to that user ID.
-3. The credential password remains a bcrypt hash and existing credentials can sign in.
-4. `users.password_hash` no longer exists after the backfill succeeds.
-5. Session creation, session expiry and sign-out work with the new MySQL-backed session table.
+1. the administrator account can sign in and sign out;
+2. all seeded `site_pages` and their ordered sections/items/actions exist;
+3. profile, navigation, experience, project, availability and résumé records are present;
+4. public pages render their copy from the database;
+5. scheduled/draft/private content remains excluded from public queries.
 
 ## Release smoke tests
 

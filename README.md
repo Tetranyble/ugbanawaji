@@ -22,7 +22,7 @@ I built it to keep my work, technical writing and experiments in one place. The 
 - Better Auth
 - TipTap
 - React Hook Form and Zod
-- Nodemailer
+- Vendor-neutral SMTP through emailjs
 - OpenAI-compatible and local AI providers
 
 ## Run it locally
@@ -77,7 +77,7 @@ npm run db:seed
 npm run dev
 ```
 
-The seed command creates the admin account and adds starter content. Seeded articles remain drafts until they are reviewed and published from the CMS.
+The seed command creates the admin account and loads the current portfolio content: profile positioning, homepage sections, navigation, experience, projects, skills, education, availability and résumé variants. Seeded articles remain drafts until they are reviewed and published from the CMS.
 
 ## Environment variables
 
@@ -106,6 +106,22 @@ NEXT_PUBLIC_SITE_URL=http://localhost:3000
 
 The publishing interface uses `APP_TIMEZONE`, while database timestamps are stored in UTC. Do not commit `.env.local` or a populated production environment file.
 
+## Editable portfolio content
+
+The public portfolio is fully database-backed. Source code defines rendering behavior; public-facing copy does not live in page/component literals or source-code fallbacks. The admin workspace includes dedicated editors for:
+
+- profile identity, positioning, contact details and assets
+- homepage sections, snapshot items, About copy, focus areas, skill groups and education
+- every public page/template through **Pages & sections**, including section order, visibility, labels, empty states, CTAs, SEO copy and system copy
+- projects and normalized project technologies/metrics
+- experience and normalized highlights/impact areas
+- header, mobile, footer and header-CTA navigation
+- content pages such as Work, Blog, Series, Ask, Hire, Privacy, Security, Uses, Now, Search, newsletter and error/offline pages
+- recruiter availability and résumé variants
+- posts, knowledge entries, newsletter content and media
+
+Initial public content is centralized in `src/db/seed-content.ts`; `src/db/seed.ts` only persists that canonical seed into a clean database. Run `npm run content:audit` to guard against accidentally reintroducing hard-coded public UI copy.
+
 ## Publishing
 
 The CMS lives under `/admin`, and public registration is disabled. Posts and case studies can be saved as drafts, scheduled, previewed through expiring links and restored from earlier revisions.
@@ -133,10 +149,10 @@ S3-compatible services are supported through `AWS_ENDPOINT` and `AWS_FORCE_PATH_
 
 The project keeps transactional mail and newsletter delivery separate:
 
-- `MAIL_*` sends contact notifications and subscription confirmation emails.
-- `NEWSLETTER_MAIL_*` sends newsletter campaigns.
+- `MAIL_*` sends contact notifications and subscription confirmation emails through any standard SMTP provider.
+- `NEWSLETTER_MAIL_*` can use separate SMTP credentials for newsletter campaigns.
 
-Both use `log` mode by default during local development, so messages and confirmation links appear in the terminal. Subscriber data, confirmation state, campaigns and delivery attempts are stored in MySQL.
+Both use `log` mode by default during local development, so messages and confirmation links appear in the terminal. Subscriber data, confirmation state, campaigns and delivery attempts are stored in MySQL. Production credentials remain server-only environment variables.
 
 Run one newsletter delivery batch with:
 
@@ -181,14 +197,15 @@ During local development, sync the database from the Drizzle schema:
 npm run db:push
 ```
 
-For production changes, generate and review a migration before applying it:
+The portfolio content schema has been intentionally reset to a clean normalized model. For a recreated database, use `npm run db:push` followed by `npm run db:seed`.
+
+Before applying this schema to an environment that already uses migration history, generate and review a new baseline from the current schema:
 
 ```bash
 npm run db:generate
-npm run db:migrate
 ```
 
-The reviewed baseline is stored in `drizzle/0000_release_baseline.sql`.
+The removed legacy baseline must not be applied to this normalized content model.
 
 To reset local application data and seed it again:
 

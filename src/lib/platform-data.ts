@@ -4,6 +4,7 @@ import {
   analyticsEvents,
   contactMessages,
   contentEntries,
+  mixpanelEvents,
   newsletterCampaigns,
   newsletterDeliveries,
   newsletterSubscribers,
@@ -176,14 +177,24 @@ export async function getAnalyticsSummary(days = 30) {
   ]);
 
   const delivery = Object.fromEntries(deliveryRows.map((row) => [row.status, row.total])) as Record<string, number>;
+  const mixpanel = await getMixpanelAnalyticsSummary(start);
+  const useMixpanel = Boolean(mixpanel && mixpanel.total > 0);
+
   return {
-    total: totalRows[0]?.total ?? 0,
-    sessions: sessionRows[0]?.sessions ?? 0,
-    topPages,
-    topReferrers,
+    total: useMixpanel ? mixpanel!.total : (totalRows[0]?.total ?? 0),
+    sessions: useMixpanel ? mixpanel!.sessions : (sessionRows[0]?.sessions ?? 0),
+    topPages: useMixpanel ? mixpanel!.topPages : topPages,
+    topReferrers: useMixpanel ? mixpanel!.topReferrers : topReferrers,
     topSearches,
-    topCountries,
-    trafficTrend,
+    topCountries: useMixpanel ? mixpanel!.topCountries : topCountries,
+    topCities: useMixpanel ? mixpanel!.topCities : [],
+    topSources: useMixpanel ? mixpanel!.topSources : [],
+    topCampaigns: useMixpanel ? mixpanel!.topCampaigns : [],
+    topDevices: useMixpanel ? mixpanel!.topDevices : [],
+    topBrowsers: useMixpanel ? mixpanel!.topBrowsers : [],
+    trafficTrend: useMixpanel ? mixpanel!.trafficTrend : trafficTrend,
+    analyticsSource: useMixpanel ? "mixpanel" as const : "first-party" as const,
+    lastSyncedAt: useMixpanel ? mixpanel!.lastSyncedAt : null,
     activeSubscribers: activeSubscriberRows[0]?.total ?? 0,
     newSubscribers: newSubscriberRows[0]?.total ?? 0,
     contactInquiries: inquiryRows[0]?.total ?? 0,
@@ -192,6 +203,80 @@ export async function getAnalyticsSummary(days = 30) {
     newsletterFailed: delivery.FAILED ?? 0,
     days,
   };
+}
+
+async function getMixpanelAnalyticsSummary(start: Date) {
+  const pageView = and(
+    inArray(mixpanelEvents.eventType, ["$mp_web_page_view", "page_view"]),
+    sql`${mixpanelEvents.occurredAt} >= ${start}`,
+  );
+
+  try {
+    const [
+      totalRows,
+      sessionRows,
+      topPages,
+      topReferrers,
+      topCountries,
+      topCities,
+      topSources,
+      topCampaigns,
+      topDevices,
+      topBrowsers,
+      trafficTrend,
+      syncRows,
+    ] = await Promise.all([
+      db.select({ total: sql<number>`count(*)`.mapWith(Number) }).from(mixpanelEvents).where(pageView),
+      db.select({ sessions: sql<number>`count(distinct coalesce(${mixpanelEvents.sessionHash}, ${mixpanelEvents.distinctIdHash}))`.mapWith(Number) }).from(mixpanelEvents).where(pageView),
+      db.select({ path: mixpanelEvents.path, views: sql<number>`count(*)`.mapWith(Number) })
+        .from(mixpanelEvents).where(and(pageView, sql`${mixpanelEvents.path} is not null`))
+        .groupBy(mixpanelEvents.path).orderBy(desc(sql`count(*)`)).limit(15),
+      db.select({ referrerHost: mixpanelEvents.referrerHost, views: sql<number>`count(*)`.mapWith(Number) })
+        .from(mixpanelEvents).where(and(pageView, sql`${mixpanelEvents.referrerHost} is not null`))
+        .groupBy(mixpanelEvents.referrerHost).orderBy(desc(sql`count(*)`)).limit(10),
+      db.select({ country: mixpanelEvents.country, views: sql<number>`count(*)`.mapWith(Number) })
+        .from(mixpanelEvents).where(and(pageView, sql`${mixpanelEvents.country} is not null`))
+        .groupBy(mixpanelEvents.country).orderBy(desc(sql`count(*)`)).limit(10),
+      db.select({ label: mixpanelEvents.city, views: sql<number>`count(*)`.mapWith(Number) })
+        .from(mixpanelEvents).where(and(pageView, sql`${mixpanelEvents.city} is not null`))
+        .groupBy(mixpanelEvents.city).orderBy(desc(sql`count(*)`)).limit(10),
+      db.select({ label: mixpanelEvents.source, views: sql<number>`count(*)`.mapWith(Number) })
+        .from(mixpanelEvents).where(and(pageView, sql`${mixpanelEvents.source} is not null`))
+        .groupBy(mixpanelEvents.source).orderBy(desc(sql`count(*)`)).limit(10),
+      db.select({ label: mixpanelEvents.campaign, views: sql<number>`count(*)`.mapWith(Number) })
+        .from(mixpanelEvents).where(and(pageView, sql`${mixpanelEvents.campaign} is not null`))
+        .groupBy(mixpanelEvents.campaign).orderBy(desc(sql`count(*)`)).limit(10),
+      db.select({ label: mixpanelEvents.device, views: sql<number>`count(*)`.mapWith(Number) })
+        .from(mixpanelEvents).where(and(pageView, sql`${mixpanelEvents.device} is not null`))
+        .groupBy(mixpanelEvents.device).orderBy(desc(sql`count(*)`)).limit(10),
+      db.select({ label: mixpanelEvents.browser, views: sql<number>`count(*)`.mapWith(Number) })
+        .from(mixpanelEvents).where(and(pageView, sql`${mixpanelEvents.browser} is not null`))
+        .groupBy(mixpanelEvents.browser).orderBy(desc(sql`count(*)`)).limit(10),
+      db.select({ day: sql<string>`date_format(${mixpanelEvents.occurredAt}, '%Y-%m-%d')`, views: sql<number>`count(*)`.mapWith(Number) })
+        .from(mixpanelEvents).where(pageView)
+        .groupBy(sql`date_format(${mixpanelEvents.occurredAt}, '%Y-%m-%d')`)
+        .orderBy(sql`date_format(${mixpanelEvents.occurredAt}, '%Y-%m-%d')`),
+      db.select({ lastSyncedAt: sql<Date | null>`max(${mixpanelEvents.syncedAt})` }).from(mixpanelEvents),
+    ]);
+
+    return {
+      total: totalRows[0]?.total ?? 0,
+      sessions: sessionRows[0]?.sessions ?? 0,
+      topPages,
+      topReferrers,
+      topCountries,
+      topCities,
+      topSources,
+      topCampaigns,
+      topDevices,
+      topBrowsers,
+      trafficTrend,
+      lastSyncedAt: syncRows[0]?.lastSyncedAt ?? null,
+    };
+  } catch {
+    // A new deployment can render before its migration and first sync have run.
+    return null;
+  }
 }
 
 export async function getSeriesById(id: string | null | undefined) {

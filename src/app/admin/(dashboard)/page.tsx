@@ -58,29 +58,29 @@ export default async function AdminDashboard() {
 
       <div className="mt-6 grid gap-6 xl:grid-cols-[1.1fr_.9fr]">
         <Card className="shadow-none">
-          <CardHeader className="flex-row items-start justify-between gap-4">
-            <div><CardTitle>Recent publishing work</CardTitle><CardDescription className="mt-1">The latest articles you changed in the CMS.</CardDescription></div>
-            <Button asChild variant="ghost" size="sm"><Link href="/admin/posts">All posts <ArrowRight className="size-4" /></Link></Button>
+          <CardHeader className="items-start gap-4 sm:flex-row sm:justify-between">
+            <div className="min-w-0"><CardTitle>Recent publishing work</CardTitle><CardDescription className="mt-1">The latest articles you changed in the CMS.</CardDescription></div>
+            <Button asChild variant="ghost" size="sm" className="shrink-0"><Link href="/admin/posts">All posts <ArrowRight className="size-4" /></Link></Button>
           </CardHeader>
           <CardContent>
             {allPosts.length ? <div className="divide-y divide-border">{allPosts.slice(0, 6).map((post) => (
-              <Link key={post.id} href={`/admin/posts/${post.id}`} className="flex items-start justify-between gap-4 py-4 first:pt-0 last:pb-0">
-                <div className="min-w-0"><p className="truncate font-semibold">{post.title}</p><p className="mt-1 text-xs text-muted-foreground">Updated {formatDate(post.updatedAt)} · {post.contentType.replaceAll("_", " ")}</p></div>
-                <Badge variant={post.status === "PUBLISHED" ? "default" : "outline"}>{post.status}</Badge>
+              <Link key={post.id} href={`/admin/posts/${post.id}`} className="flex min-w-0 flex-col items-start gap-2 py-4 first:pt-0 last:pb-0 sm:flex-row sm:justify-between sm:gap-4">
+                <div className="w-full min-w-0"><p className="truncate font-semibold">{post.title}</p><p className="mt-1 break-words text-xs text-muted-foreground">Updated {formatDate(post.updatedAt)} · {post.contentType.replaceAll("_", " ")}</p></div>
+                <Badge variant={post.status === "PUBLISHED" ? "default" : "outline"} className="shrink-0">{post.status}</Badge>
               </Link>
             ))}</div> : <p className="text-sm leading-6 text-muted-foreground">No articles yet. Create the first engineering note when you are ready.</p>}
           </CardContent>
         </Card>
 
         <Card className="shadow-none">
-          <CardHeader className="flex-row items-start justify-between gap-4">
-            <div><CardTitle>Recent enquiries</CardTitle><CardDescription className="mt-1">Recruiter, collaboration and reader messages.</CardDescription></div>
-            <Button asChild variant="ghost" size="sm"><Link href="/admin/messages">Inbox <ArrowRight className="size-4" /></Link></Button>
+          <CardHeader className="items-start gap-4 sm:flex-row sm:justify-between">
+            <div className="min-w-0"><CardTitle>Recent enquiries</CardTitle><CardDescription className="mt-1">Recruiter, collaboration and reader messages.</CardDescription></div>
+            <Button asChild variant="ghost" size="sm" className="shrink-0"><Link href="/admin/messages">Inbox <ArrowRight className="size-4" /></Link></Button>
           </CardHeader>
           <CardContent>
             {messages.length ? <div className="divide-y divide-border">{messages.map((message) => (
               <Link key={message.id} href="/admin/messages" className="block py-4 first:pt-0 last:pb-0">
-                <div className="flex items-center justify-between gap-3"><p className="truncate font-semibold">{message.name}</p>{!message.readAt ? <Badge>New</Badge> : <Badge variant="outline">{message.status}</Badge>}</div>
+                <div className="flex min-w-0 flex-col items-start gap-2 sm:flex-row sm:items-center sm:justify-between sm:gap-3"><p className="max-w-full truncate font-semibold">{message.name}</p>{!message.readAt ? <Badge className="shrink-0">New</Badge> : <Badge variant="outline" className="shrink-0">{message.status}</Badge>}</div>
                 <p className="mt-1 line-clamp-2 text-sm leading-6 text-muted-foreground">{message.message}</p>
               </Link>
             ))}</div> : <p className="text-sm leading-6 text-muted-foreground">No messages yet. New contact enquiries will appear here.</p>}

@@ -54,8 +54,8 @@ GOOGLE_DRIVE_FOLDER_NAME="Ugbanawaji Portfolio Media"
 
 MAIL_MAILER=log
 MAIL_HOST=smtp.zoho.com
-MAIL_PORT=587
-MAIL_SCHEME=tls
+MAIL_PORT=465
+MAIL_SCHEME=ssl
 MAIL_USERNAME=
 MAIL_PASSWORD=
 MAIL_FROM_ADDRESS=u.ekenekiso@ugbanawaji.com
@@ -63,9 +63,9 @@ MAIL_FROM_NAME="Ekenekiso Ugbanawaji"
 MAIL_TO_ADDRESS=u.ekenekiso@ugbanawaji.com
 
 NEWSLETTER_MAILER=log
-NEWSLETTER_MAIL_HOST=127.0.0.1
-NEWSLETTER_MAIL_PORT=587
-NEWSLETTER_MAIL_SCHEME=tls
+NEWSLETTER_MAIL_HOST=
+NEWSLETTER_MAIL_PORT=465
+NEWSLETTER_MAIL_SCHEME=ssl
 NEWSLETTER_MAIL_USERNAME=
 NEWSLETTER_MAIL_PASSWORD=
 NEWSLETTER_MAIL_FROM_ADDRESS=u.ekenekiso@ugbanawaji.com
@@ -130,7 +130,7 @@ else
   echo "package-lock.json is absent; generating it with strict peer dependency checks..."; npm install
   npm run lockfile:check
 fi
-echo "Applying database migrations..."; npm run db:migrate
+echo "Syncing the clean database schema..."; npm run db:push
 echo "Seeding administrator and portfolio starter content..."; npm run db:seed
 
 echo ""

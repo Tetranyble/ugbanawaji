@@ -1,7 +1,8 @@
-import { and, desc, eq, inArray, lte, ne } from "drizzle-orm";
+import { and, desc, inArray, lte, ne } from "drizzle-orm";
 import { db } from "@/db";
-import { posts, projects } from "@/db/schema";
+import { posts } from "@/db/schema";
 import { getTaxonomyForPosts } from "@/lib/taxonomy";
+import { getPublishedProjects } from "@/lib/data";
 
 function norm(value: string) { return value.trim().toLowerCase(); }
 
@@ -19,9 +20,9 @@ export async function getRelatedPosts(postId: string, categories: string[], tags
 
 export async function getRelatedProjectsForPost(categories: string[], tags: string[]) {
   const terms = new Set([...categories, ...tags].map(norm));
-  const candidates = await db.select().from(projects).where(eq(projects.status, "PUBLISHED")).orderBy(desc(projects.featured), projects.sortOrder).limit(30);
+  const candidates = (await getPublishedProjects()).slice(0, 30);
   return candidates.map((project) => {
-    const stack = (project.techStack ?? []).map(norm);
+    const stack = project.techStack.map(norm);
     const body = `${project.kind} ${project.title} ${project.summary}`.toLowerCase();
     let score = stack.filter((tech) => terms.has(tech)).length * 3;
     for (const term of terms) if (term.length > 2 && body.includes(term)) score += 1;

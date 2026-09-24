@@ -17,7 +17,7 @@ export default async function AuditPage() {
           <Card key={item.id}>
             <CardContent className="flex flex-col gap-3 p-5 sm:flex-row sm:items-center sm:justify-between">
               <div><div className="flex flex-wrap items-center gap-2"><Badge>{item.action}</Badge><strong>{item.entity}</strong>{item.entityId ? <code className="text-xs text-muted-foreground">{item.entityId}</code> : null}</div><p className="mt-2 text-xs text-muted-foreground">{formatDate(item.createdAt)} · user {item.userId}</p></div>
-              <pre className="max-w-md overflow-x-auto text-xs text-muted-foreground">{JSON.stringify(item.metadata)}</pre>
+              <pre className="w-full max-w-full overflow-x-auto text-xs text-muted-foreground sm:w-auto sm:max-w-md">{JSON.stringify(item.metadata)}</pre>
             </CardContent>
           </Card>
         ))}

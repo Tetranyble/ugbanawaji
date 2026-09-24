@@ -1,4 +1,4 @@
-import nodemailer from "nodemailer";
+import { Message, SMTPClient } from "emailjs";
 
 type Channel = "transactional" | "newsletter";
 
@@ -24,8 +24,6 @@ function config(channel: Channel) {
     process.env[newsletter ? `NEWSLETTER_MAIL_${key}` : `MAIL_${key}`] || "";
 
   return {
-    // NEWSLETTER_MAILER predates the NEWSLETTER_MAIL_* namespace and is
-    // intentionally retained for deployment compatibility.
     mailer: ((newsletter ? process.env.NEWSLETTER_MAILER : process.env.MAIL_MAILER) || "log").toLowerCase(),
     host: get("HOST"),
     port: Number(get("PORT") || 587),
@@ -37,11 +35,13 @@ function config(channel: Channel) {
   };
 }
 
+function address(name: string, email: string) {
+  const safeName = name.replace(/["\r\n]/g, "").trim();
+  return safeName ? `"${safeName}" <${email}>` : email;
+}
+
 export async function sendMail(channel: Channel, input: MailInput) {
   const cfg = config(channel);
-  if (channel === "newsletter" && /(zoho|zeptomail)/i.test(cfg.host)) {
-    throw new Error("Newsletter delivery is intentionally blocked for Zoho Mail/ZeptoMail. Configure NEWSLETTER_MAIL_* with a bulk-capable or self-hosted SMTP transport.");
-  }
   if (cfg.mailer === "log") {
     console.info(`[mail:${channel}]`, {
       to: input.to,
@@ -52,20 +52,45 @@ export async function sendMail(channel: Channel, input: MailInput) {
     });
     return { messageId: `log-${Date.now()}` };
   }
-  const transporter = nodemailer.createTransport({
+  if (cfg.mailer !== "smtp") {
+    throw new Error(`Unsupported ${channel} mailer: ${cfg.mailer}. Use "log" or "smtp".`);
+  }
+  if (!cfg.host || !cfg.username || !cfg.password) {
+    throw new Error(`${channel} SMTP delivery requires host, username, and password.`);
+  }
+
+  const client = new SMTPClient({
     host: cfg.host,
     port: cfg.port,
-    secure: cfg.scheme === "ssl" || cfg.port === 465,
-    auth: cfg.username ? { user: cfg.username, pass: cfg.password } : undefined,
-    requireTLS: cfg.scheme === "tls",
+    user: cfg.username,
+    password: cfg.password,
+    ssl: cfg.scheme === "ssl" || cfg.port === 465,
+    tls: cfg.scheme === "tls" && cfg.port !== 465,
+    timeout: 30_000,
   });
-  return transporter.sendMail({
-    from: { address: cfg.fromAddress, name: cfg.fromName },
+
+  const message = new Message({
+    ...input.headers,
+    from: address(cfg.fromName, cfg.fromAddress),
     to: input.to,
     subject: input.subject,
-    html: input.html,
     text: input.text,
-    headers: input.headers,
-    attachments: input.attachments,
+    attachment: [
+      { data: input.html, alternative: true, type: "text/html", charset: "utf-8" },
+      ...(input.attachments ?? []).map((attachment) => ({
+        path: attachment.path,
+        name: attachment.filename,
+        type: attachment.contentType,
+        headers: { "Content-ID": `<${attachment.cid}>` },
+      })),
+    ],
   });
+
+  try {
+    const result = await client.sendAsync(message);
+    const messageId = result instanceof Message ? result.header["message-id"] : result["message-id"];
+    return { messageId: typeof messageId === "string" ? messageId : null };
+  } finally {
+    client.smtp.close();
+  }
 }

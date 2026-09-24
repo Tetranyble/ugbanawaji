@@ -122,15 +122,18 @@ function main() {
     parsedUrl("GOOGLE_DRIVE_REDIRECT_URI");
   }
 
-  if ((value("MAIL_MAILER") || "log").toLowerCase() === "log") errors.push("MAIL_MAILER must use a production SMTP transport, not log.");
-  required("MAIL_HOST");
+  const mailer = (value("MAIL_MAILER") || "log").toLowerCase();
+  if (mailer === "log") errors.push("MAIL_MAILER must use SMTP in production, not log.");
+  else if (mailer === "smtp") {
+    required("MAIL_HOST");
+    required("MAIL_USERNAME");
+    required("MAIL_PASSWORD", 12);
+  } else errors.push("MAIL_MAILER must be smtp in production.");
   required("MAIL_FROM_ADDRESS");
   required("MAIL_TO_ADDRESS");
-  required("MAIL_USERNAME");
-  required("MAIL_PASSWORD", 12);
 
   if ((value("NEWSLETTER_MAILER") || "log").toLowerCase() === "log") warnings.push("NEWSLETTER_MAILER is still in log mode; campaigns will not be delivered.");
-  if ((value("NEWSLETTER_MAILER") || "log").toLowerCase() !== "log") {
+  else {
     required("NEWSLETTER_MAIL_HOST");
     required("NEWSLETTER_MAIL_FROM_ADDRESS");
     required("NEWSLETTER_MAIL_USERNAME");

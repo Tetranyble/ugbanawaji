@@ -99,8 +99,6 @@ export const posts = mysqlTable(
     seriesOrder: int("series_order").notNull().default(0),
     coverImage: varchar("cover_image", { length: 700 }),
     youtubeUrl: varchar("youtube_url", { length: 700 }),
-    // Compatibility bridge for the first portfolio schema. New code uses normalized tag tables.
-    legacyTags: json("tags").$type<string[]>().notNull(),
     seoTitle: varchar("seo_title", { length: 220 }),
     seoDescription: varchar("seo_description", { length: 320 }),
     readingMinutes: int("reading_minutes").notNull().default(1),
@@ -283,8 +281,6 @@ export const projects = mysqlTable(
     confidentialityNote: text("confidentiality_note"),
     diagrams: json("diagrams").$type<Array<{ title: string; mermaid: string }>>(),
     codeSamples: json("code_samples").$type<Array<{ title: string; language: string; code: string; explanation?: string }>>(),
-    techStack: json("tech_stack").$type<string[]>().notNull(),
-    metrics: json("metrics").$type<Array<{ label: string; value: string }>>().notNull(),
     featured: boolean("featured").notNull().default(false),
     status: mysqlEnum("status", ["DRAFT", "PUBLISHED"]).notNull().default("DRAFT"),
     externalUrl: varchar("external_url", { length: 500 }),
@@ -310,8 +306,6 @@ export const experiences = mysqlTable(
     endDate: varchar("end_date", { length: 30 }),
     current: boolean("current").notNull().default(false),
     summary: text("summary").notNull(),
-    highlights: json("highlights").$type<string[]>().notNull(),
-    impactAreas: json("impact_areas").$type<string[]>(),
     sortOrder: int("sort_order").notNull().default(0),
     createdAt: datetime("created_at", { mode: "date" }).notNull(),
     updatedAt: datetime("updated_at", { mode: "date" }).notNull(),
@@ -319,15 +313,39 @@ export const experiences = mysqlTable(
   (table) => [index("experiences_sort_idx").on(table.sortOrder)]
 );
 
-export const siteSettings = mysqlTable(
-  "site_settings",
+export const availabilityProfiles = mysqlTable(
+  "availability_profiles",
   {
     id: varchar("id", { length: 36 }).primaryKey(),
-    key: varchar("key", { length: 120 }).notNull(),
-    value: json("value").$type<Record<string, unknown>>().notNull(),
+    visible: boolean("visible").notNull().default(true),
+    status: varchar("status", { length: 220 }).notNull(),
+    relocation: text("relocation"),
+    note: text("note"),
+    createdAt: datetime("created_at", { mode: "date" }).notNull(),
     updatedAt: datetime("updated_at", { mode: "date" }).notNull(),
+  }
+);
+
+export const availabilityTargetRoles = mysqlTable(
+  "availability_target_roles",
+  {
+    id: varchar("id", { length: 36 }).primaryKey(),
+    availabilityId: varchar("availability_id", { length: 36 }).notNull().references(() => availabilityProfiles.id, { onDelete: "cascade" }),
+    label: varchar("label", { length: 180 }).notNull(),
+    sortOrder: int("sort_order").notNull().default(0),
   },
-  (table) => [uniqueIndex("site_settings_key_unique").on(table.key)]
+  (table) => [index("availability_target_roles_sort_idx").on(table.availabilityId, table.sortOrder)]
+);
+
+export const availabilityWorkModes = mysqlTable(
+  "availability_work_modes",
+  {
+    id: varchar("id", { length: 36 }).primaryKey(),
+    availabilityId: varchar("availability_id", { length: 36 }).notNull().references(() => availabilityProfiles.id, { onDelete: "cascade" }),
+    label: varchar("label", { length: 120 }).notNull(),
+    sortOrder: int("sort_order").notNull().default(0),
+  },
+  (table) => [index("availability_work_modes_sort_idx").on(table.availabilityId, table.sortOrder)]
 );
 
 export const contactMessages = mysqlTable(
@@ -475,6 +493,40 @@ export const analyticsEvents = mysqlTable(
   (table) => [index("analytics_event_created_idx").on(table.eventType, table.createdAt), index("analytics_path_created_idx").on(table.path, table.createdAt)]
 );
 
+export const mixpanelEvents = mysqlTable(
+  "mixpanel_events",
+  {
+    id: varchar("id", { length: 64 }).primaryKey(),
+    insertId: varchar("insert_id", { length: 191 }).notNull(),
+    eventType: varchar("event_type", { length: 160 }).notNull(),
+    distinctIdHash: varchar("distinct_id_hash", { length: 64 }),
+    sessionHash: varchar("session_hash", { length: 64 }),
+    path: varchar("path", { length: 700 }),
+    referrerHost: varchar("referrer_host", { length: 255 }),
+    source: varchar("source", { length: 255 }),
+    medium: varchar("medium", { length: 160 }),
+    campaign: varchar("campaign", { length: 255 }),
+    content: varchar("content", { length: 255 }),
+    term: varchar("term", { length: 255 }),
+    country: varchar("country", { length: 8 }),
+    region: varchar("region", { length: 160 }),
+    city: varchar("city", { length: 160 }),
+    browser: varchar("browser", { length: 120 }),
+    operatingSystem: varchar("operating_system", { length: 120 }),
+    device: varchar("device", { length: 120 }),
+    metadata: json("metadata").$type<Record<string, unknown>>().notNull(),
+    occurredAt: datetime("occurred_at", { mode: "date" }).notNull(),
+    syncedAt: datetime("synced_at", { mode: "date" }).notNull(),
+  },
+  (table) => [
+    uniqueIndex("mixpanel_event_insert_unique").on(table.insertId),
+    index("mixpanel_event_type_occurred_idx").on(table.eventType, table.occurredAt),
+    index("mixpanel_event_path_occurred_idx").on(table.path, table.occurredAt),
+    index("mixpanel_event_country_occurred_idx").on(table.country, table.occurredAt),
+    index("mixpanel_event_campaign_occurred_idx").on(table.campaign, table.occurredAt),
+  ]
+);
+
 export const rateLimitBuckets = mysqlTable(
   "rate_limit_buckets",
   {
@@ -592,4 +644,258 @@ export const projectRevisions = mysqlTable(
     createdAt: datetime("created_at", { mode: "date" }).notNull(),
   },
   (table) => [index("project_revisions_project_created_idx").on(table.projectId, table.createdAt)]
+);
+
+export const siteProfiles = mysqlTable(
+  "site_profiles",
+  {
+    id: varchar("id", { length: 36 }).primaryKey(),
+    siteName: varchar("site_name", { length: 120 }).notNull(),
+    name: varchar("name", { length: 180 }).notNull(),
+    displayName: varchar("display_name", { length: 160 }).notNull(),
+    location: varchar("location", { length: 180 }).notNull(),
+    email: varchar("email", { length: 191 }).notNull(),
+    phone: varchar("phone", { length: 80 }).notNull(),
+    domain: varchar("domain", { length: 500 }).notNull(),
+    linkedin: varchar("linkedin", { length: 500 }).notNull(),
+    github: varchar("github", { length: 500 }).notNull(),
+    resume: varchar("resume", { length: 700 }).notNull(),
+    portrait: varchar("portrait", { length: 700 }).notNull(),
+    eyebrow: varchar("eyebrow", { length: 180 }).notNull(),
+    headline: varchar("headline", { length: 320 }).notNull(),
+    intro: text("intro").notNull(),
+    currentFocus: text("current_focus").notNull(),
+    contactIntro: text("contact_intro").notNull(),
+    createdAt: datetime("created_at", { mode: "date" }).notNull(),
+    updatedAt: datetime("updated_at", { mode: "date" }).notNull(),
+  },
+  (table) => [uniqueIndex("site_profiles_site_name_unique").on(table.siteName)]
+);
+
+export const profileAboutParagraphs = mysqlTable(
+  "profile_about_paragraphs",
+  {
+    id: varchar("id", { length: 36 }).primaryKey(),
+    profileId: varchar("profile_id", { length: 36 }).notNull().references(() => siteProfiles.id, { onDelete: "cascade" }),
+    body: text("body").notNull(),
+    sortOrder: int("sort_order").notNull().default(0),
+    createdAt: datetime("created_at", { mode: "date" }).notNull(),
+    updatedAt: datetime("updated_at", { mode: "date" }).notNull(),
+  },
+  (table) => [index("profile_about_profile_sort_idx").on(table.profileId, table.sortOrder)]
+);
+
+export const sitePages = mysqlTable(
+  "site_pages",
+  {
+    id: varchar("id", { length: 36 }).primaryKey(),
+    slug: varchar("slug", { length: 140 }).notNull(),
+    route: varchar("route", { length: 240 }).notNull(),
+    title: varchar("title", { length: 320 }).notNull(),
+    seoTitle: varchar("seo_title", { length: 220 }),
+    seoDescription: varchar("seo_description", { length: 320 }),
+    status: mysqlEnum("status", ["DRAFT", "PUBLISHED"]).notNull().default("PUBLISHED"),
+    createdAt: datetime("created_at", { mode: "date" }).notNull(),
+    updatedAt: datetime("updated_at", { mode: "date" }).notNull(),
+  },
+  (table) => [uniqueIndex("site_pages_slug_unique").on(table.slug), uniqueIndex("site_pages_route_unique").on(table.route)]
+);
+
+export const pageSections = mysqlTable(
+  "page_sections",
+  {
+    id: varchar("id", { length: 36 }).primaryKey(),
+    pageId: varchar("page_id", { length: 36 }).notNull().references(() => sitePages.id, { onDelete: "cascade" }),
+    key: varchar("key", { length: 120 }).notNull(),
+    component: varchar("component", { length: 120 }).notNull().default("RICH_TEXT"),
+    eyebrow: varchar("eyebrow", { length: 180 }),
+    title: varchar("title", { length: 320 }),
+    description: text("description"),
+    body: longtext("body"),
+    enabled: boolean("enabled").notNull().default(true),
+    sortOrder: int("sort_order").notNull().default(0),
+    itemLimit: int("item_limit"),
+    createdAt: datetime("created_at", { mode: "date" }).notNull(),
+    updatedAt: datetime("updated_at", { mode: "date" }).notNull(),
+  },
+  (table) => [
+    uniqueIndex("page_sections_page_key_unique").on(table.pageId, table.key),
+    index("page_sections_page_sort_idx").on(table.pageId, table.sortOrder),
+  ]
+);
+
+export const pageSectionItems = mysqlTable(
+  "page_section_items",
+  {
+    id: varchar("id", { length: 36 }).primaryKey(),
+    sectionId: varchar("section_id", { length: 36 }).notNull().references(() => pageSections.id, { onDelete: "cascade" }),
+    key: varchar("key", { length: 120 }),
+    title: varchar("title", { length: 320 }),
+    subtitle: varchar("subtitle", { length: 320 }),
+    description: text("description"),
+    value: longtext("value"),
+    href: varchar("href", { length: 700 }),
+    icon: varchar("icon", { length: 80 }),
+    enabled: boolean("enabled").notNull().default(true),
+    sortOrder: int("sort_order").notNull().default(0),
+  },
+  (table) => [
+    index("page_section_items_section_sort_idx").on(table.sectionId, table.sortOrder),
+    index("page_section_items_section_key_idx").on(table.sectionId, table.key),
+  ]
+);
+
+export const pageSectionActions = mysqlTable(
+  "page_section_actions",
+  {
+    id: varchar("id", { length: 36 }).primaryKey(),
+    sectionId: varchar("section_id", { length: 36 }).notNull().references(() => pageSections.id, { onDelete: "cascade" }),
+    key: varchar("key", { length: 120 }),
+    label: varchar("label", { length: 160 }).notNull(),
+    href: varchar("href", { length: 700 }).notNull(),
+    variant: mysqlEnum("variant", ["PRIMARY", "SECONDARY", "OUTLINE", "GHOST", "LINK"]).notNull().default("PRIMARY"),
+    external: boolean("external").notNull().default(false),
+    enabled: boolean("enabled").notNull().default(true),
+    sortOrder: int("sort_order").notNull().default(0),
+  },
+  (table) => [index("page_section_actions_section_sort_idx").on(table.sectionId, table.sortOrder)]
+);
+
+export const focusAreas = mysqlTable(
+  "focus_areas",
+  {
+    id: varchar("id", { length: 36 }).primaryKey(),
+    title: varchar("title", { length: 180 }).notNull(),
+    description: text("description").notNull(),
+    icon: varchar("icon", { length: 80 }).notNull().default("blocks"),
+    sortOrder: int("sort_order").notNull().default(0),
+    createdAt: datetime("created_at", { mode: "date" }).notNull(),
+    updatedAt: datetime("updated_at", { mode: "date" }).notNull(),
+  },
+  (table) => [index("focus_areas_sort_idx").on(table.sortOrder)]
+);
+
+export const focusAreaTags = mysqlTable(
+  "focus_area_tags",
+  {
+    id: varchar("id", { length: 36 }).primaryKey(),
+    focusAreaId: varchar("focus_area_id", { length: 36 }).notNull().references(() => focusAreas.id, { onDelete: "cascade" }),
+    label: varchar("label", { length: 100 }).notNull(),
+    sortOrder: int("sort_order").notNull().default(0),
+  },
+  (table) => [index("focus_area_tags_area_sort_idx").on(table.focusAreaId, table.sortOrder)]
+);
+
+export const skillGroups = mysqlTable(
+  "skill_groups",
+  {
+    id: varchar("id", { length: 36 }).primaryKey(),
+    title: varchar("title", { length: 160 }).notNull(),
+    sortOrder: int("sort_order").notNull().default(0),
+    createdAt: datetime("created_at", { mode: "date" }).notNull(),
+    updatedAt: datetime("updated_at", { mode: "date" }).notNull(),
+  },
+  (table) => [index("skill_groups_sort_idx").on(table.sortOrder)]
+);
+
+export const skillItems = mysqlTable(
+  "skill_items",
+  {
+    id: varchar("id", { length: 36 }).primaryKey(),
+    groupId: varchar("group_id", { length: 36 }).notNull().references(() => skillGroups.id, { onDelete: "cascade" }),
+    label: varchar("label", { length: 120 }).notNull(),
+    sortOrder: int("sort_order").notNull().default(0),
+  },
+  (table) => [index("skill_items_group_sort_idx").on(table.groupId, table.sortOrder)]
+);
+
+export const educationEntries = mysqlTable(
+  "education_entries",
+  {
+    id: varchar("id", { length: 36 }).primaryKey(),
+    type: mysqlEnum("type", ["EDUCATION", "CERTIFICATION"]).notNull(),
+    title: varchar("title", { length: 240 }).notNull(),
+    institution: varchar("institution", { length: 220 }),
+    year: varchar("year", { length: 40 }),
+    detail: text("detail"),
+    sortOrder: int("sort_order").notNull().default(0),
+    createdAt: datetime("created_at", { mode: "date" }).notNull(),
+    updatedAt: datetime("updated_at", { mode: "date" }).notNull(),
+  },
+  (table) => [index("education_entries_type_sort_idx").on(table.type, table.sortOrder)]
+);
+
+export const askStarterPrompts = mysqlTable(
+  "ask_starter_prompts",
+  {
+    id: varchar("id", { length: 36 }).primaryKey(),
+    label: varchar("label", { length: 120 }).notNull(),
+    question: text("question").notNull(),
+    enabled: boolean("enabled").notNull().default(true),
+    sortOrder: int("sort_order").notNull().default(0),
+    createdAt: datetime("created_at", { mode: "date" }).notNull(),
+    updatedAt: datetime("updated_at", { mode: "date" }).notNull(),
+  },
+  (table) => [index("ask_starter_prompts_sort_idx").on(table.sortOrder)]
+);
+
+export const navigationItems = mysqlTable(
+  "navigation_items",
+  {
+    id: varchar("id", { length: 36 }).primaryKey(),
+    placement: mysqlEnum("placement", ["HEADER", "MOBILE", "FOOTER", "HEADER_CTA"]).notNull(),
+    label: varchar("label", { length: 120 }).notNull(),
+    href: varchar("href", { length: 500 }).notNull(),
+    external: boolean("external").notNull().default(false),
+    enabled: boolean("enabled").notNull().default(true),
+    sortOrder: int("sort_order").notNull().default(0),
+    createdAt: datetime("created_at", { mode: "date" }).notNull(),
+    updatedAt: datetime("updated_at", { mode: "date" }).notNull(),
+  },
+  (table) => [index("navigation_items_placement_sort_idx").on(table.placement, table.sortOrder)]
+);
+
+export const projectTechnologies = mysqlTable(
+  "project_technologies",
+  {
+    id: varchar("id", { length: 36 }).primaryKey(),
+    projectId: varchar("project_id", { length: 36 }).notNull().references(() => projects.id, { onDelete: "cascade" }),
+    label: varchar("label", { length: 100 }).notNull(),
+    sortOrder: int("sort_order").notNull().default(0),
+  },
+  (table) => [index("project_technologies_project_sort_idx").on(table.projectId, table.sortOrder)]
+);
+
+export const projectMetrics = mysqlTable(
+  "project_metrics",
+  {
+    id: varchar("id", { length: 36 }).primaryKey(),
+    projectId: varchar("project_id", { length: 36 }).notNull().references(() => projects.id, { onDelete: "cascade" }),
+    label: varchar("label", { length: 160 }).notNull(),
+    value: varchar("value", { length: 120 }).notNull(),
+    sortOrder: int("sort_order").notNull().default(0),
+  },
+  (table) => [index("project_metrics_project_sort_idx").on(table.projectId, table.sortOrder)]
+);
+
+export const experienceHighlights = mysqlTable(
+  "experience_highlights",
+  {
+    id: varchar("id", { length: 36 }).primaryKey(),
+    experienceId: varchar("experience_id", { length: 36 }).notNull().references(() => experiences.id, { onDelete: "cascade" }),
+    body: text("body").notNull(),
+    sortOrder: int("sort_order").notNull().default(0),
+  },
+  (table) => [index("experience_highlights_experience_sort_idx").on(table.experienceId, table.sortOrder)]
+);
+
+export const experienceImpactAreas = mysqlTable(
+  "experience_impact_areas",
+  {
+    id: varchar("id", { length: 36 }).primaryKey(),
+    experienceId: varchar("experience_id", { length: 36 }).notNull().references(() => experiences.id, { onDelete: "cascade" }),
+    label: varchar("label", { length: 120 }).notNull(),
+    sortOrder: int("sort_order").notNull().default(0),
+  },
+  (table) => [index("experience_impact_areas_experience_sort_idx").on(table.experienceId, table.sortOrder)]
 );

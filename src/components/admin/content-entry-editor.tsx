@@ -47,7 +47,7 @@ export function ContentEntryEditor({entry={},action,deleteAction}:{entry?:Value;
   });
   const { register, formState: { errors, isSubmitting } } = form;
 
-  return <div className="max-w-6xl"><div className="mb-7 flex items-end justify-between gap-4"><div><p className="section-kicker">Knowledge base</p><h1 className="mt-2 text-3xl font-extrabold">{entry.id?"Edit content":"New structured content"}</h1></div><Button asChild variant="outline"><Link href="/admin/content">Back</Link></Button></div>
+  return <div className="max-w-6xl"><div className="mb-7 flex flex-col items-start gap-4 sm:flex-row sm:items-end sm:justify-between"><div className="min-w-0"><p className="section-kicker">Knowledge base</p><h1 className="mt-2 break-words text-3xl font-extrabold">{entry.id?"Edit content":"New structured content"}</h1></div><Button asChild variant="outline" className="shrink-0"><Link href="/admin/content">Back</Link></Button></div>
     <form ref={formRef} onSubmit={onSubmit} noValidate className="space-y-6">
       <Card><CardHeader><CardTitle>Content identity</CardTitle><CardDescription>This CMS powers the engineering-principles, ADR, open-source, speaking, now, uses, reading and changelog sections.</CardDescription></CardHeader><CardContent className="grid gap-5 sm:grid-cols-2">
         <div className="space-y-2"><Label>Type</Label><select {...register("type")} className="h-11 w-full rounded-xl border border-border bg-background px-3 text-sm">{Object.entries(contentTypeLabels).map(([value,label])=><option key={value} value={value}>{label}</option>)}</select></div>
